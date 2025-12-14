@@ -48,24 +48,51 @@ break-timer.html?duration=10&label=BRB&color=FF6B6B&hidecontrols=true
 
 ### GitHub Pages (Recommended)
 
-1. Push this repository to GitHub
-2. Go to repository **Settings** > **Pages**
-3. Under "Source", select **Deploy from a branch**
-4. Choose **main** branch and **/ (root)** folder
+GitHub Pages is the simplest way to host these overlays for free.
+
+#### Setup Steps
+
+1. Go to your repository on GitHub
+2. Click **Settings** (gear icon in the top menu)
+3. In the left sidebar, click **Pages** (under "Code and automation")
+4. Under **Build and deployment**:
+   - **Source:** Select `Deploy from a branch`
+   - **Branch:** Select `main` (or `master`)
+   - **Folder:** Select `/ (root)`
 5. Click **Save**
 
-Your overlays will be available at:
+#### GitHub Pages Settings Summary
+
+| Setting | Value |
+|---------|-------|
+| Source | Deploy from a branch |
+| Branch | `main` |
+| Folder | `/ (root)` |
+
+After saving, GitHub will build and deploy your site. This takes 1-2 minutes. Your overlays will be available at:
+
 ```
-https://[username].github.io/gscrl-obs/overlays/break-timer.html
+https://ricklon.github.io/gscrl-obs/
+https://ricklon.github.io/gscrl-obs/overlays/break-timer.html
 ```
 
-### Cloudflare Pages
+#### Custom Domain (Optional)
 
-1. Connect your GitHub repository to Cloudflare Pages
-2. Build settings:
+To use a custom domain like `obs.gscrl.org`:
+
+1. In **Pages** settings, enter your custom domain
+2. Add a CNAME record in your DNS pointing to `ricklon.github.io`
+3. Enable **Enforce HTTPS** once DNS propagates
+
+### Cloudflare Pages (Alternative)
+
+1. Go to [Cloudflare Pages](https://pages.cloudflare.com/)
+2. Click **Create a project** > **Connect to Git**
+3. Select this repository
+4. Build settings:
    - **Build command:** (leave empty)
    - **Build output directory:** `/`
-3. Deploy
+5. Click **Save and Deploy**
 
 Your overlays will be available at:
 ```
