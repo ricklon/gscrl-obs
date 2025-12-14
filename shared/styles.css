@@ -1,0 +1,377 @@
+/**
+ * GSCRL-OBS Shared Styles
+ * Common styles, CSS variables for theming across all overlays
+ */
+
+/* ========================================
+   CSS Custom Properties (Theme Variables)
+   ======================================== */
+
+:root {
+  /* GSCRL Brand Colors */
+  --gscrl-primary: #FF6B6B;
+  --gscrl-secondary: #4ECDC4;
+  --gscrl-dark: #1a1a2e;
+  --gscrl-darker: #0f0f1a;
+  --gscrl-light: #ffffff;
+  --gscrl-gray: #888899;
+
+  /* Semantic Colors */
+  --color-success: #4ECDC4;
+  --color-warning: #FFE66D;
+  --color-danger: #FF6B6B;
+  --color-info: #45B7D1;
+
+  /* Typography */
+  --font-display: 'Russo One', 'Impact', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+  --text-5xl: 5rem;
+
+  /* Effects */
+  --glow-color: var(--gscrl-primary);
+  --glow-intensity: 0 0 20px;
+  --glow-strong: 0 0 30px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+/* ========================================
+   Base Reset & Defaults (for overlays)
+   ======================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--gscrl-light);
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ========================================
+   Typography Utilities
+   ======================================== */
+
+.font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-glow {
+  text-shadow: var(--glow-intensity) var(--glow-color);
+}
+
+.text-glow-strong {
+  text-shadow: var(--glow-strong) var(--glow-color);
+}
+
+/* ========================================
+   Common Overlay Components
+   ======================================== */
+
+/* Container for centering content */
+.overlay-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-4);
+}
+
+/* Glass-morphism panel */
+.panel {
+  background: rgba(26, 26, 46, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  backdrop-filter: blur(10px);
+}
+
+/* Accent border glow */
+.accent-border {
+  border: 2px solid var(--gscrl-primary);
+  box-shadow:
+    0 0 10px var(--gscrl-primary),
+    inset 0 0 10px rgba(255, 107, 107, 0.1);
+}
+
+/* Badge component */
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-full);
+  background: var(--gscrl-primary);
+  color: var(--gscrl-light);
+}
+
+.badge--secondary {
+  background: var(--gscrl-secondary);
+  color: var(--gscrl-dark);
+}
+
+/* ========================================
+   Settings Panel Styles
+   ======================================== */
+
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  max-height: 100vh;
+  overflow-y: auto;
+  background: var(--gscrl-dark);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-4);
+  transform: translateX(100%);
+  transition: transform var(--transition-base);
+  z-index: 1000;
+}
+
+.settings-panel.open {
+  transform: translateX(0);
+}
+
+.settings-toggle {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--gscrl-dark);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--gscrl-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  transition: all var(--transition-fast);
+  z-index: 1001;
+}
+
+.settings-toggle:hover {
+  background: var(--gscrl-primary);
+  border-color: var(--gscrl-primary);
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--gscrl-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-base);
+  color: var(--gscrl-light);
+  background: var(--gscrl-darker);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--gscrl-primary);
+}
+
+.form-input[type="color"] {
+  padding: var(--space-1);
+  height: 40px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn--primary {
+  background: var(--gscrl-primary);
+  color: var(--gscrl-light);
+}
+
+.btn--primary:hover {
+  background: #ff5252;
+  box-shadow: 0 0 15px var(--gscrl-primary);
+}
+
+.btn--secondary {
+  background: var(--gscrl-secondary);
+  color: var(--gscrl-dark);
+}
+
+.btn--secondary:hover {
+  background: #3dbdb5;
+  box-shadow: 0 0 15px var(--gscrl-secondary);
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--gscrl-light);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gscrl-light);
+}
+
+.btn--sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.btn--lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-lg);
+}
+
+/* Button group */
+.btn-group {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ========================================
+   Animation Utilities
+   ======================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--glow-color), 0 0 10px var(--glow-color);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+  }
+}
+
+.animate-fadeIn { animation: fadeIn var(--transition-base) ease forwards; }
+.animate-fadeOut { animation: fadeOut var(--transition-base) ease forwards; }
+.animate-slideInRight { animation: slideInRight var(--transition-base) ease forwards; }
+.animate-slideInUp { animation: slideInUp var(--transition-base) ease forwards; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* ========================================
+   Responsive Utilities
+   ======================================== */
+
+/* Hide in OBS (for settings/controls) */
+.obs-hide {
+  /* Override in OBS Custom CSS: .obs-hide { display: none !important; } */
+}
+
+/* Visible only in settings mode */
+@media (max-width: 600px) {
+  .settings-panel {
+    width: 100%;
+    max-width: none;
+  }
+}

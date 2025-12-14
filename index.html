@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSCRL OBS Overlays</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #ffffff;
+      --gray: #888899;
+      --font-display: 'Russo One', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--darker);
+      color: var(--light);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--primary);
+      text-shadow: 0 0 30px var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      color: var(--gray);
+      font-size: 1.125rem;
+    }
+
+    /* Overlay Grid */
+    .overlays-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .overlay-card {
+      background: var(--dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .overlay-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .overlay-preview {
+      height: 180px;
+      background: var(--darker);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    .overlay-content {
+      padding: 20px;
+    }
+
+    .overlay-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-badge {
+      font-family: var(--font-body);
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .status-badge.ready {
+      background: var(--secondary);
+      color: var(--dark);
+    }
+
+    .status-badge.planned {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--gray);
+    }
+
+    .overlay-desc {
+      color: var(--gray);
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+    }
+
+    .overlay-meta {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .overlay-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--light);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--light);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--light);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Quick Start Section */
+    .section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .quick-start {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 30px;
+    }
+
+    .quick-start ol {
+      padding-left: 24px;
+    }
+
+    .quick-start li {
+      margin-bottom: 12px;
+    }
+
+    .code-block {
+      background: var(--darker);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
+    .footer a {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* URL Params Section */
+    .params-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .params-table th,
+    .params-table td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .params-table th {
+      color: var(--gray);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .params-table code {
+      background: var(--darker);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="logo">GSCRL OBS</h1>
+      <p class="tagline">Browser overlays for Garden State Robot League live streaming</p>
+    </header>
+
+    <!-- Overlays Grid -->
+    <section class="section">
+      <h2 class="section-title">OVERLAYS</h2>
+      <div class="overlays-grid">
+        <!-- Break Timer -->
+        <div class="overlay-card">
+          <div class="overlay-preview">TIMER</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Break Timer
+              <span class="status-badge ready">Ready</span>
+            </h3>
+            <p class="overlay-desc">Countdown display for stream breaks with circular progress ring and customizable duration.</p>
+            <p class="overlay-meta">Recommended: 400 x 450</p>
+            <div class="overlay-actions">
+              <a href="overlays/break-timer.html" class="btn btn-primary">Open</a>
+              <a href="docs/OBS-SETUP.md" class="btn btn-secondary">Setup</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match Info -->
+        <div class="overlay-card">
+          <div class="overlay-preview">MATCH</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Match Info
+              <span class="status-badge planned">Planned</span>
+            </h3>
+            <p class="overlay-desc">Display current match details including player names, bot names, and weight class.</p>
+            <p class="overlay-meta">Recommended: 1920 x 200</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="overlay-card">
+          <div class="overlay-preview">3-2-1</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Countdown
+              <span class="status-badge planned">Planned</span>
+            </h3>
+            <p class="overlay-desc">Pre-match countdown animation with customizable final text and sound effects.</p>
+            <p class="overlay-meta">Recommended: 1920 x 1080</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lower Third -->
+        <div class="overlay-card">
+          <div class="overlay-preview">LOWER 3RD</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Lower Third
+              <span class="status-badge planned">Planned</span>
+            </h3>
+            <p class="overlay-desc">Flexible lower third graphic for names, announcements, and sponsor callouts.</p>
+            <p class="overlay-meta">Recommended: 1920 x 200</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bracket -->
+        <div class="overlay-card">
+          <div class="overlay-preview">BRACKET</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Bracket Display
+              <span class="status-badge planned">Planned</span>
+            </h3>
+            <p class="overlay-desc">Tournament bracket visualization with True Finals API integration.</p>
+            <p class="overlay-meta">Recommended: 1920 x 1080</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sponsors -->
+        <div class="overlay-card">
+          <div class="overlay-preview">SPONSORS</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Sponsor Rotation
+              <span class="status-badge planned">Planned</span>
+            </h3>
+            <p class="overlay-desc">Rotating sponsor logo display with configurable timing and transitions.</p>
+            <p class="overlay-meta">Recommended: 400 x 150</p>
+            <div class="overlay-actions">
+              <button class="btn btn-primary" disabled>Coming Soon</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="section">
+      <h2 class="section-title">QUICK START</h2>
+      <div class="quick-start">
+        <ol>
+          <li>In OBS, click <strong>+</strong> in Sources and select <strong>Browser</strong></li>
+          <li>Name your source (e.g., "Break Timer")</li>
+          <li>Enter the overlay URL:
+            <div class="code-block">https://gscrl-obs.pages.dev/overlays/break-timer.html</div>
+          </li>
+          <li>Set dimensions (e.g., 400 x 450 for Break Timer)</li>
+          <li>Add custom CSS for transparency:
+            <div class="code-block">body { background: transparent !important; }</div>
+          </li>
+          <li>Position and resize in your scene</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- URL Parameters -->
+    <section class="section">
+      <h2 class="section-title">URL PARAMETERS</h2>
+      <div class="quick-start">
+        <p>Configure overlays via URL parameters for preset configurations:</p>
+        <table class="params-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Description</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>duration</code></td>
+              <td>Timer duration in minutes</td>
+              <td><code>?duration=15</code></td>
+            </tr>
+            <tr>
+              <td><code>label</code></td>
+              <td>Display text</td>
+              <td><code>?label=BACK%20SOON</code></td>
+            </tr>
+            <tr>
+              <td><code>color</code></td>
+              <td>Accent color (hex without #)</td>
+              <td><code>?color=4ECDC4</code></td>
+            </tr>
+            <tr>
+              <td><code>autostart</code></td>
+              <td>Start timer on load</td>
+              <td><code>?autostart=true</code></td>
+            </tr>
+            <tr>
+              <td><code>hidecontrols</code></td>
+              <td>Hide control buttons</td>
+              <td><code>?hidecontrols=true</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 16px;">Example full URL:</p>
+        <div class="code-block">https://gscrl-obs.pages.dev/overlays/break-timer.html?duration=10&amp;label=BRB&amp;color=FF6B6B&amp;hidecontrols=true</div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        GSCRL OBS Overlays |
+        <a href="https://github.com/gscrl/gscrl-obs">GitHub</a> |
+        <a href="docs/OBS-SETUP.md">Documentation</a>
+      </p>
+      <p style="margin-top: 8px;">Garden State Robot League</p>
+    </footer>
+  </div>
+</body>
+</html>

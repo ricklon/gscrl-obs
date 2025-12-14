@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Break Timer - GSCRL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       CSS Variables (Theme)
+       ======================================== */
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #ffffff;
+      --gray: #888899;
+      --font-display: 'Russo One', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    /* ========================================
+       Base Styles
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: transparent;
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ========================================
+       Timer Container
+       ======================================== */
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    /* ========================================
+       Timer Ring
+       ======================================== */
+    .timer-ring-wrapper {
+      position: relative;
+      width: 280px;
+      height: 280px;
+    }
+
+    .timer-ring {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .timer-ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 8;
+    }
+
+    .timer-ring-progress {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 816;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+      filter: drop-shadow(0 0 10px var(--primary));
+    }
+
+    .timer-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .timer-time {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 20px var(--primary);
+    }
+
+    .timer-label {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Controls
+       ======================================== */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .controls.hidden {
+      display: none;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--light);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--light);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--light);
+    }
+
+    /* ========================================
+       Settings Panel
+       ======================================== */
+    .settings-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--dark);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--light);
+      cursor: pointer;
+      font-size: 1.25rem;
+      z-index: 1001;
+      transition: all 0.2s ease;
+    }
+
+    .settings-toggle:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .settings-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100vh;
+      background: var(--dark);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 60px 20px 20px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .settings-panel.open {
+      transform: translateX(0);
+    }
+
+    .settings-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--light);
+      background: var(--darker);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .form-input[type="color"] {
+      padding: 4px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .preset-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--darker);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: var(--light);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preset-btn:hover,
+    .preset-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    /* ========================================
+       Expired State
+       ======================================== */
+    .timer-container.expired .timer-time {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Timer Display -->
+  <div class="timer-container" id="timerContainer">
+    <div class="timer-ring-wrapper">
+      <svg class="timer-ring" viewBox="0 0 280 280">
+        <circle class="timer-ring-bg" cx="140" cy="140" r="130" />
+        <circle class="timer-ring-progress" id="timerProgress" cx="140" cy="140" r="130" />
+      </svg>
+      <div class="timer-content">
+        <div class="timer-time" id="timerDisplay">10:00</div>
+        <div class="timer-label" id="timerLabel">BE RIGHT BACK</div>
+      </div>
+    </div>
+
+    <div class="controls" id="controls">
+      <button class="btn btn-primary" id="startPauseBtn">Start</button>
+      <button class="btn btn-secondary" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <!-- Settings Toggle -->
+  <button class="settings-toggle" id="settingsToggle">&#9881;</button>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <h2 class="settings-title">TIMER SETTINGS</h2>
+
+    <div class="form-group">
+      <label class="form-label">Quick Presets</label>
+      <div class="preset-buttons">
+        <button class="preset-btn" data-minutes="5">5 min</button>
+        <button class="preset-btn active" data-minutes="10">10 min</button>
+        <button class="preset-btn" data-minutes="15">15 min</button>
+        <button class="preset-btn" data-minutes="20">20 min</button>
+        <button class="preset-btn" data-minutes="30">30 min</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="customMinutes">Custom Duration (minutes)</label>
+      <input type="number" class="form-input" id="customMinutes" min="1" max="120" value="10">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="labelText">Label Text</label>
+      <input type="text" class="form-input" id="labelText" value="BE RIGHT BACK" maxlength="30">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="accentColor">Accent Color</label>
+      <input type="color" class="form-input" id="accentColor" value="#FF6B6B">
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="showControls" checked>
+        <span>Show Controls</span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-primary" id="applySettings" style="width: 100%;">Apply</button>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // Timer State
+    // ========================================
+    let state = {
+      duration: 10 * 60,       // Total duration in seconds
+      remaining: 10 * 60,      // Remaining time in seconds
+      isRunning: false,
+      intervalId: null,
+      label: 'BE RIGHT BACK',
+      accentColor: '#FF6B6B',
+      showControls: true
+    };
+
+    // ========================================
+    // DOM Elements
+    // ========================================
+    const timerContainer = document.getElementById('timerContainer');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerLabel = document.getElementById('timerLabel');
+    const timerProgress = document.getElementById('timerProgress');
+    const controls = document.getElementById('controls');
+    const startPauseBtn = document.getElementById('startPauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    const customMinutes = document.getElementById('customMinutes');
+    const labelText = document.getElementById('labelText');
+    const accentColor = document.getElementById('accentColor');
+    const showControls = document.getElementById('showControls');
+    const applySettings = document.getElementById('applySettings');
+
+    // Ring circumference for progress calculation
+    const circumference = 2 * Math.PI * 130;
+    timerProgress.style.strokeDasharray = circumference;
+
+    // ========================================
+    // URL Parameter Parsing
+    // ========================================
+    function parseUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Duration in minutes
+      if (params.has('duration')) {
+        const minutes = parseInt(params.get('duration'), 10);
+        if (!isNaN(minutes) && minutes > 0 && minutes <= 120) {
+          state.duration = minutes * 60;
+          state.remaining = minutes * 60;
+          customMinutes.value = minutes;
+        }
+      }
+
+      // Label text
+      if (params.has('label')) {
+        state.label = decodeURIComponent(params.get('label'));
+        labelText.value = state.label;
+      }
+
+      // Accent color (hex without #)
+      if (params.has('color')) {
+        const hex = params.get('color').replace('#', '');
+        if (/^[0-9A-Fa-f]{6}$/.test(hex)) {
+          state.accentColor = '#' + hex;
+          accentColor.value = state.accentColor;
+        }
+      }
+
+      // Auto-start
+      if (params.get('autostart') === 'true') {
+        setTimeout(() => startTimer(), 500);
+      }
+
+      // Hide controls
+      if (params.get('hidecontrols') === 'true') {
+        state.showControls = false;
+        showControls.checked = false;
+      }
+    }
+
+    // ========================================
+    // Timer Functions
+    // ========================================
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateDisplay() {
+      timerDisplay.textContent = formatTime(state.remaining);
+      timerLabel.textContent = state.label;
+
+      // Update progress ring
+      const progress = state.remaining / state.duration;
+      const offset = circumference * (1 - progress);
+      timerProgress.style.strokeDashoffset = offset;
+
+      // Expired state
+      if (state.remaining <= 0) {
+        timerContainer.classList.add('expired');
+      } else {
+        timerContainer.classList.remove('expired');
+      }
+    }
+
+    function startTimer() {
+      if (state.remaining <= 0) return;
+
+      state.isRunning = true;
+      startPauseBtn.textContent = 'Pause';
+
+      state.intervalId = setInterval(() => {
+        state.remaining--;
+        updateDisplay();
+
+        if (state.remaining <= 0) {
+          pauseTimer();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      state.isRunning = false;
+      startPauseBtn.textContent = 'Start';
+
+      if (state.intervalId) {
+        clearInterval(state.intervalId);
+        state.intervalId = null;
+      }
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      state.remaining = state.duration;
+      updateDisplay();
+    }
+
+    function setDuration(minutes) {
+      pauseTimer();
+      state.duration = minutes * 60;
+      state.remaining = minutes * 60;
+      customMinutes.value = minutes;
+      updateDisplay();
+    }
+
+    function applyTheme() {
+      document.documentElement.style.setProperty('--primary', state.accentColor);
+    }
+
+    // ========================================
+    // Event Listeners
+    // ========================================
+    startPauseBtn.addEventListener('click', () => {
+      if (state.isRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    });
+
+    resetBtn.addEventListener('click', resetTimer);
+
+    settingsToggle.addEventListener('click', () => {
+      settingsPanel.classList.toggle('open');
+    });
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setDuration(parseInt(btn.dataset.minutes, 10));
+      });
+    });
+
+    customMinutes.addEventListener('change', () => {
+      const minutes = parseInt(customMinutes.value, 10);
+      if (!isNaN(minutes) && minutes > 0 && minutes <= 120) {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        setDuration(minutes);
+      }
+    });
+
+    applySettings.addEventListener('click', () => {
+      // Update label
+      state.label = labelText.value || 'BE RIGHT BACK';
+
+      // Update color
+      state.accentColor = accentColor.value;
+      applyTheme();
+
+      // Update controls visibility
+      state.showControls = showControls.checked;
+      controls.classList.toggle('hidden', !state.showControls);
+
+      // Update duration from custom input
+      const minutes = parseInt(customMinutes.value, 10);
+      if (!isNaN(minutes) && minutes > 0 && minutes <= 120) {
+        setDuration(minutes);
+      }
+
+      updateDisplay();
+
+      // Save to localStorage
+      saveSettings();
+
+      // Close panel
+      settingsPanel.classList.remove('open');
+    });
+
+    // ========================================
+    // Settings Persistence
+    // ========================================
+    const STORAGE_KEY = 'gscrl-break-timer-settings';
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          duration: state.duration,
+          label: state.label,
+          accentColor: state.accentColor,
+          showControls: state.showControls
+        }));
+      } catch (e) {
+        console.warn('Failed to save settings:', e);
+      }
+    }
+
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const settings = JSON.parse(saved);
+          state.duration = settings.duration || state.duration;
+          state.remaining = state.duration;
+          state.label = settings.label || state.label;
+          state.accentColor = settings.accentColor || state.accentColor;
+          state.showControls = settings.showControls !== false;
+
+          // Update form inputs
+          customMinutes.value = Math.floor(state.duration / 60);
+          labelText.value = state.label;
+          accentColor.value = state.accentColor;
+          showControls.checked = state.showControls;
+        }
+      } catch (e) {
+        console.warn('Failed to load settings:', e);
+      }
+    }
+
+    // ========================================
+    // Initialize
+    // ========================================
+    function init() {
+      loadSettings();
+      parseUrlParams();  // URL params override localStorage
+      applyTheme();
+      controls.classList.toggle('hidden', !state.showControls);
+      updateDisplay();
+    }
+
+    init();
+  </script>
+</body>
+</html>
