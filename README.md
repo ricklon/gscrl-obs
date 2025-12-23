@@ -18,6 +18,7 @@ A collection of self-contained HTML overlays designed for use as OBS browser sou
 
 | Overlay | Status | Description |
 |---------|--------|-------------|
+| [Welcome Screen](overlays/welcome-screen.html) | Ready | Cinematic event launch with animated logo, host intros, event details, and sponsor acknowledgments |
 | [Waiting Screen](overlays/waiting-screen.html) | Ready | Pre-stream screen with countdown, event info, and loading animation |
 | [Break Timer](overlays/break-timer.html) | Ready | Countdown timer with circular progress ring |
 | [Match Info](overlays/match-info.html) | Ready | Current match display (players, bots, weight class, status) |
@@ -138,6 +139,35 @@ gscrl-obs/
 ```
 
 ## URL Parameters
+
+### Welcome Screen
+
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| `logo` | Event logo text | GSCRL | `?logo=GSCRL%202024` |
+| `subtitle` | Event subtitle | ROBOT COMBAT LEAGUE | `?subtitle=SUMMER%20CHAMPIONSHIP` |
+| `welcometitle` | Welcome title | WELCOME TO | `?welcometitle=GREETINGS%20FROM` |
+| `event` | Event name (highlight) | SUMMER SHOWDOWN | `?event=NATIONAL%20INVITATIONAL` |
+| `final` | Final message | LET'S GET READY TO RUMBLE | `?final=IT%27S%20SHOWTIME` |
+| `date` | Event date | JUNE 15, 2024 | `?date=AUGUST%2010,%202024` |
+| `location` | Event location | VIRTUAL ARENA | `?location=ATLANTIC%20CITY` |
+| `weights` | Weight classes | 3LB • 12LB • 30LB | `?weights=1LB%20•%203LB%20•%2012LB` |
+| `matches` | Number of matches | 12 MATCHES | `?matches=8%20MATCHES` |
+| `competitors` | Number of competitors | 24 COMPETITORS | `?competitors=16%20COMPETITORS` |
+| `host1name` | Host 1 name | JOHN DOE | `?host1name=JOHN%20SMITH` |
+| `host1role` | Host 1 role | PLAY-BY-PLAY | `?host1role=MAIN%20COMMENTATOR` |
+| `host2name` | Host 2 name | JANE SMITH | `?host2name=JANE%20DOE` |
+| `host2role` | Host 2 role | COLOR COMMENTARY | `?host2role=CO-HOST` |
+| `host3name` | Host 3 name | MIKE JONES | `?host3name=MIKE%20JOHNSON` |
+| `host3role` | Host 3 role | RINGSIDE ANALYST | `?host3role=TECHNICAL%20ANALYST` |
+| `twitter` | Twitter handle | @GSCRL | `?twitter=@GSCRL_League` |
+| `facebook` | Facebook handle | /GSCRL | `?facebook=/GSCRLOfficial` |
+| `instagram` | Instagram handle | @GSCRL | `?instagram=@GSCRL_Gram` |
+| `twitch` | Twitch handle | GSCRL | `?twitch=GSCRL_TV` |
+| `showhosts` | Show hosts section | true | `?showhosts=false` |
+| `showsocial` | Show social media | true | `?showsocial=false` |
+| `showsponsors` | Show sponsors | true | `?showsponsors=false` |
+| `color` | Accent color (hex) | FF6B6B | `?color=4ECDC4` |
 
 ### Waiting Screen
 
