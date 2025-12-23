@@ -19,7 +19,7 @@ A collection of self-contained HTML overlays designed for use as OBS browser sou
 | Overlay | Status | Description |
 |---------|--------|-------------|
 | [Break Timer](overlays/break-timer.html) | Ready | Countdown timer with circular progress ring |
-| Match Info | Planned | Current match display (players, bots, arena) |
+| [Match Info](overlays/match-info.html) | Ready | Current match display (players, bots, weight class, status) |
 | Countdown | Planned | Pre-match countdown (3-2-1-FIGHT style) |
 | Lower Third | Planned | Customizable lower third graphic |
 | Bracket | Planned | Tournament bracket display |
@@ -148,6 +148,25 @@ gscrl-obs/
 | `autostart` | Start on load | false | `?autostart=true` |
 | `hidecontrols` | Hide buttons | false | `?hidecontrols=true` |
 
+### Match Info
+
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| `event` | Event name | GSCRL EVENT | `?event=Summer%20Showdown` |
+| `weightclass` | Weight class | 3lb | `?weightclass=12lb` |
+| `round` | Match round | 1 | `?round=2` |
+| `matchstatus` | Match status | UPCOMING | `?matchstatus=IN%20PROGRESS` |
+| `timer` | Match timer (MM:SS) | 03:00 | `?timer=05:00` |
+| `redplayer` | Red player name | Player 1 | `?redplayer=John%20Doe` |
+| `redbot` | Red bot name | Bot A | `?redbot=Crusher` |
+| `redrecord` | Red record (W-L) | 0-0 | `?redrecord=5-2` |
+| `blueplayer` | Blue player name | Player 2 | `?blueplayer=Jane%20Smith` |
+| `bluebot` | Blue bot name | Bot B | `?bluebot=Spinner` |
+| `bluerecord` | Blue record (W-L) | 0-0 | `?bluerecord=3-1` |
+| `showrecords` | Show player records | true | `?showrecords=false` |
+| `showevent` | Show event name | true | `?showevent=false` |
+| `color` | Accent color (hex) | FF6B6B | `?color=4ECDC4` |
+
 ## Theming
 
 Override CSS variables to customize the look:
@@ -172,7 +191,7 @@ See [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) for detailed theming options.
 ## Development Phases
 
 - [x] **Phase 1: Foundation** — Break timer, repo setup, deployment
-- [ ] **Phase 2: Core Overlays** — Match info, countdown, lower third
+- [x] **Phase 2: Core Overlays** — Match info ✓, countdown, lower third
 - [ ] **Phase 3: Integration** — True Finals API, WebSocket control
 - [ ] **Phase 4: Polish** — Sponsors, sound effects, animations
 
