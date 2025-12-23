@@ -18,6 +18,7 @@ A collection of self-contained HTML overlays designed for use as OBS browser sou
 
 | Overlay | Status | Description |
 |---------|--------|-------------|
+| [Waiting Screen](overlays/waiting-screen.html) | Ready | Pre-stream screen with countdown, event info, and loading animation |
 | [Break Timer](overlays/break-timer.html) | Ready | Countdown timer with circular progress ring |
 | [Match Info](overlays/match-info.html) | Ready | Current match display (players, bots, weight class, status) |
 | Countdown | Planned | Pre-match countdown (3-2-1-FIGHT style) |
@@ -137,6 +138,29 @@ gscrl-obs/
 ```
 
 ## URL Parameters
+
+### Waiting Screen
+
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| `message` | Main message | STREAM STARTING SOON | `?message=WE%20WILL%20BEGIN%20SHORTLY` |
+| `start` | Estimated start time | 14:30 | `?start=15:00` |
+| `label` | Countdown label | ESTIMATED START TIME | `?label=STREAM%20BEGins%20AT` |
+| `loading` | Loading text | LOADING STREAM | `?loading=PREPARING%20BROADCAST` |
+| `logo` | Event logo text | GSCRL | `?logo=GSCRL%202024` |
+| `subtitle` | Event subtitle | ROBOT COMBAT LEAGUE | `?subtitle=SUMMER%20CHAMPIONSHIP` |
+| `event` | Event name | Summer Showdown | `?event=Annual%20Invitational` |
+| `date` | Event date | June 15, 2024 | `?date=August%2010,%202024` |
+| `location` | Event location | Virtual Arena | `?location=New%20Jersey` |
+| `weights` | Weight classes | 3lb, 12lb, 30lb | `?weights=1lb,%203lb,%2012lb` |
+| `twitter` | Twitter handle | @GSCRL | `?twitter=@GSCRL_League` |
+| `facebook` | Facebook handle | /GSCRL | `?facebook=/GSCRLOfficial` |
+| `instagram` | Instagram handle | @GSCRL | `?instagram=@GSCRL_Gram` |
+| `twitch` | Twitch handle | GSCRL | `?twitch=GSCRL_TV` |
+| `showinfo` | Show event info | true | `?showinfo=false` |
+| `showsocial` | Show social media | true | `?showsocial=false` |
+| `showtech` | Show technical info | true | `?showtech=false` |
+| `color` | Accent color (hex) | FF6B6B | `?color=4ECDC4` |
 
 ### Break Timer
 
