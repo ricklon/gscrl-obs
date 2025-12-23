@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Screen - GSCRL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/styles.css">
+  <style>
+    /* ========================================
+       Welcome Screen Specific Styles
+       ======================================== */
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--space-4);
+      box-sizing: border-box;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--gscrl-darker) 0%, var(--gscrl-dark) 100%);
+    }
+
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      max-width: 1200px;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Logo Entrance Animation */
+    .logo-entrance {
+      position: relative;
+      margin-bottom: var(--space-8);
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .welcome-logo {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 400;
+      color: var(--gscrl-light);
+      text-shadow: var(--glow-strong) var(--glow-color);
+      letter-spacing: 0.1em;
+      line-height: 1;
+      transform: perspective(500px) rotateX(15deg);
+      animation: logoReveal 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .logo-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--text-xl);
+      color: var(--gscrl-gray);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-top: var(--space-2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 0.5s forwards;
+    }
+
+    /* Main Welcome Title */
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: var(--gscrl-light);
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin: var(--space-4) 0;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: scaleIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+    }
+
+    .welcome-title .highlight {
+      color: var(--gscrl-primary);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    /* Event Info Section */
+    .event-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-6);
+      margin: var(--space-8) 0;
+      width: 100%;
+      max-width: 800px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out 2s forwards;
+    }
+
+    .event-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-6);
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(5px);
+      width: 100%;
+      transform: perspective(500px) rotateY(20deg);
+      opacity: 0;
+      animation: cardFlipIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .event-card:nth-child(1) { animation-delay: 2.2s; }
+    .event-card:nth-child(2) { animation-delay: 2.4s; }
+    .event-card:nth-child(3) { animation-delay: 2.6s; }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--gscrl-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      position: relative;
+      padding-bottom: var(--space-2);
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--gscrl-primary);
+      background: linear-gradient(90deg, var(--gscrl-primary), var(--color-success));
+    }
+
+    .card-content {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--gscrl-light);
+      line-height: 1.6;
+    }
+
+    .card-highlight {
+      color: var(--gscrl-primary);
+      font-weight: 600;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Hosts Section */
+    .hosts-section {
+      margin: var(--space-8) 0;
+      width: 100%;
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 3s forwards;
+    }
+
+    .hosts-title {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+      position: relative;
+      padding-bottom: var(--space-2);
+    }
+
+    .hosts-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: var(--gscrl-primary);
+    }
+
+    .hosts-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .host-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      transform: translateX(-20px);
+      opacity: 0;
+      animation: slideInRight 0.8s ease-out forwards;
+    }
+
+    .host-item:nth-child(1) { animation-delay: 3.2s; }
+    .host-item:nth-child(2) { animation-delay: 3.4s; }
+    .host-item:nth-child(3) { animation-delay: 3.6s; }
+
+    .host-name {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .host-role {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Social Media Section */
+    .social-showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 3.8s forwards;
+    }
+
+    .social-title {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .social-handles {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-handle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-base);
+      transform: scale(0.8);
+      opacity: 0;
+      animation: scaleIn 0.5s ease-out forwards;
+    }
+
+    .social-handle:nth-child(1) { animation-delay: 4s; }
+    .social-handle:nth-child(2) { animation-delay: 4.2s; }
+    .social-handle:nth-child(3) { animation-delay: 4.4s; }
+    .social-handle:nth-child(4) { animation-delay: 4.6s; }
+
+    .social-handle:hover {
+      background: rgba(255, 107, 107, 0.2);
+      border-color: var(--gscrl-primary);
+      transform: translateY(-2px) scale(1);
+    }
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--gscrl-primary);
+    }
+
+    .social-text {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-light);
+      font-weight: 500;
+    }
+
+    /* Sponsors Section */
+    .sponsors-section {
+      margin: var(--space-6) 0;
+      width: 100%;
+      max-width: 800px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 4.8s forwards;
+    }
+
+    .sponsors-title {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+      text-align: center;
+    }
+
+    .sponsors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .sponsor-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      height: 100px;
+      transform: scale(0.9);
+      opacity: 0;
+      animation: scaleIn 0.5s ease-out forwards;
+    }
+
+    .sponsor-card:nth-child(1) { animation-delay: 5s; }
+    .sponsor-card:nth-child(2) { animation-delay: 5.2s; }
+    .sponsor-card:nth-child(3) { animation-delay: 5.4s; }
+    .sponsor-card:nth-child(4) { animation-delay: 5.6s; }
+
+    .sponsor-logo {
+      max-width: 150px;
+      max-height: 60px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Final Message */
+    .final-message {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: var(--gscrl-light);
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin: var(--space-8) 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 6s forwards;
+    }
+
+    .final-message .emoji {
+      font-family: var(--font-body);
+    }
+
+    /* Settings Panel - Welcome Screen Specific */
+    .welcome-settings {
+      padding: var(--space-4);
+    }
+
+    .settings-section.welcome {
+      margin-bottom: var(--space-6);
+    }
+
+    /* Animations */
+    @keyframes logoReveal {
+      0% {
+        opacity: 0;
+        transform: perspective(500px) rotateX(15deg) scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: perspective(500px) rotateX(-5deg) scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(500px) rotateX(0deg) scale(1);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes cardFlipIn {
+      0% {
+        opacity: 0;
+        transform: perspective(500px) rotateY(20deg);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(500px) rotateY(0deg);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .welcome-container {
+        padding: var(--space-3);
+      }
+
+      .welcome-title {
+        font-size: clamp(2rem, 10vw, 4rem);
+      }
+
+      .event-showcase {
+        gap: var(--space-4);
+      }
+
+      .hosts-section {
+        margin: var(--space-6) 0;
+      }
+
+      .sponsors-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-logo {
+        font-size: clamp(2.5rem, 12vw, 5rem);
+      }
+
+      .welcome-title {
+        font-size: clamp(1.5rem, 8vw, 3rem);
+      }
+
+      .event-card {
+        padding: var(--space-4);
+      }
+
+      .host-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-1);
+      }
+
+      .sponsors-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Welcome Screen Display -->
+  <div class="welcome-container" id="welcomeContainer">
+    <!-- Logo Entrance -->
+    <div class="logo-entrance">
+      <div class="welcome-logo" id="eventLogo">GSCRL</div>
+      <div class="logo-subtitle" id="eventSubtitle">ROBOT COMBAT LEAGUE</div>
+    </div>
+
+    <!-- Main Welcome Title -->
+    <div class="welcome-title" id="welcomeTitle">
+      WELCOME TO <span class="highlight" id="eventName">SUMMER SHOWDOWN</span>
+    </div>
+
+    <!-- Event Info Cards -->
+    <div class="event-showcase">
+      <div class="event-card">
+        <div class="card-title">EVENT DETAILS</div>
+        <div class="card-content">
+          <span class="card-highlight" id="eventDate">JUNE 15, 2024</span> • 
+          <span class="card-highlight" id="eventLocation">VIRTUAL ARENA</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="card-title">WEIGHT CLASSES</div>
+        <div class="card-content" id="weightClasses">3LB • 12LB • 30LB</div>
+      </div>
+
+      <div class="event-card">
+        <div class="card-title">TODAY'S SCHEDULE</div>
+        <div class="card-content">
+          <span class="card-highlight" id="numMatches">12 MATCHES</span> • 
+          <span class="card-highlight" id="numCompetitors">24 COMPETITORS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hosts Section -->
+    <div class="hosts-section">
+      <div class="hosts-title">YOUR HOSTS TODAY</div>
+      
+      <div class="hosts-list">
+        <div class="host-item">
+          <div class="host-name" id="host1Name">JOHN DOE</div>
+          <div class="host-role" id="host1Role">PLAY-BY-PLAY</div>
+        </div>
+
+        <div class="host-item">
+          <div class="host-name" id="host2Name">JANE SMITH</div>
+          <div class="host-role" id="host2Role">COLOR COMMENTARY</div>
+        </div>
+
+        <div class="host-item">
+          <div class="host-name" id="host3Name">MIKE JONES</div>
+          <div class="host-role" id="host3Role">RINGSIDE ANALYST</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media Section -->
+    <div class="social-showcase">
+      <div class="social-title">CONNECT WITH US</div>
+      
+      <div class="social-handles">
+        <div class="social-handle">
+          <span class="social-icon">🐦</span>
+          <span class="social-text" id="twitterHandle">@GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">📘</span>
+          <span class="social-text" id="facebookHandle">/GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">📷</span>
+          <span class="social-text" id="instagramHandle">@GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">🎮</span>
+          <span class="social-text" id="twitchHandle">GSCRL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sponsors Section -->
+    <div class="sponsors-section">
+      <div class="sponsors-title">PROUDLY SPONSORED BY</div>
+      
+      <div class="sponsors-grid">
+        <div class="sponsor-card">
+          <div class="sponsor-logo">🏆 Sponsor 1</div>
+        </div>
+
+        <div class="sponsor-card">
+          <div class="sponsor-logo">🤖 Sponsor 2</div>
+        </div>
+
+        <div class="sponsor-card">
+          <div class="sponsor-logo">⚡ Sponsor 3</div>
+        </div>
+
+        <div class="sponsor-card">
+          <div class="sponsor-logo">🔧 Sponsor 4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Message -->
+    <div class="final-message" id="finalMessage">
+      LET'S GET READY TO RUMBLE <span class="emoji">🤖⚡🔥</span>
+    </div>
+  </div>
+
+  <!-- Settings Toggle -->
+  <button class="settings-toggle" id="settingsToggle">&#9881;</button>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <div class="welcome-settings">
+      <div class="settings-section welcome">
+        <h3 class="section-title">MAIN SETTINGS</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="eventLogoInput">Event Logo Text</label>
+          <input type="text" class="form-input" id="eventLogoInput" value="GSCRL" maxlength="20">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventSubtitleInput">Event Subtitle</label>
+          <input type="text" class="form-input" id="eventSubtitleInput" value="ROBOT COMBAT LEAGUE" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="welcomeTitleInput">Welcome Title</label>
+          <input type="text" class="form-input" id="welcomeTitleInput" value="WELCOME TO" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventNameInput">Event Name (Highlight)</label>
+          <input type="text" class="form-input" id="eventNameInput" value="SUMMER SHOWDOWN" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="finalMessageInput">Final Message</label>
+          <input type="text" class="form-input" id="finalMessageInput" value="LET'S GET READY TO RUMBLE" maxlength="100">
+        </div>
+      </div>
+
+      <div class="settings-section welcome">
+        <h3 class="section-title">EVENT DETAILS</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="eventDateInput">Event Date</label>
+          <input type="text" class="form-input" id="eventDateInput" value="JUNE 15, 2024" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventLocationInput">Event Location</label>
+          <input type="text" class="form-input" id="eventLocationInput" value="VIRTUAL ARENA" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="weightClassesInput">Weight Classes</label>
+          <input type="text" class="form-input" id="weightClassesInput" value="3LB • 12LB • 30LB" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="numMatchesInput">Number of Matches</label>
+          <input type="text" class="form-input" id="numMatchesInput" value="12 MATCHES" maxlength="20">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="numCompetitorsInput">Number of Competitors</label>
+          <input type="text" class="form-input" id="numCompetitorsInput" value="24 COMPETITORS" maxlength="20">
+        </div>
+      </div>
+
+      <div class="settings-section welcome">
+        <h3 class="section-title">HOSTS & COMMENTATORS</h3>
+
+        <div class="form-group">
+          <label class="form-label">Host 1</label>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host1NameInput" placeholder="Name" value="JOHN DOE" maxlength="30">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host1RoleInput" placeholder="Role" value="PLAY-BY-PLAY" maxlength="30">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Host 2</label>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host2NameInput" placeholder="Name" value="JANE SMITH" maxlength="30">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host2RoleInput" placeholder="Role" value="COLOR COMMENTARY" maxlength="30">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Host 3</label>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host3NameInput" placeholder="Name" value="MIKE JONES" maxlength="30">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" id="host3RoleInput" placeholder="Role" value="RINGSIDE ANALYST" maxlength="30">
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section welcome">
+        <h3 class="section-title">SOCIAL MEDIA</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="twitterHandleInput">Twitter Handle</label>
+          <input type="text" class="form-input" id="twitterHandleInput" value="@GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="facebookHandleInput">Facebook Handle</label>
+          <input type="text" class="form-input" id="facebookHandleInput" value="/GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="instagramHandleInput">Instagram Handle</label>
+          <input type="text" class="form-input" id="instagramHandleInput" value="@GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="twitchHandleInput">Twitch Handle</label>
+          <input type="text" class="form-input" id="twitchHandleInput" value="GSCRL" maxlength="30">
+        </div>
+      </div>
+
+      <div class="settings-section welcome">
+        <h3 class="section-title">DISPLAY OPTIONS</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="accentColorInput">Accent Color</label>
+          <input type="color" class="form-input" id="accentColorInput" value="#FF6B6B">
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showHostsCheckbox" checked>
+            <span>Show Hosts Section</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showSocialCheckbox" checked>
+            <span>Show Social Media</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showSponsorsCheckbox" checked>
+            <span>Show Sponsors</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn--primary" id="applySettings" style="width: 100%;">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script>
+    // ========================================
+    // Welcome Screen State
+    // ========================================
+    let state = {
+      eventLogo: 'GSCRL',
+      eventSubtitle: 'ROBOT COMBAT LEAGUE',
+      welcomeTitle: 'WELCOME TO',
+      eventName: 'SUMMER SHOWDOWN',
+      finalMessage: "LET'S GET READY TO RUMBLE",
+      eventDate: 'JUNE 15, 2024',
+      eventLocation: 'VIRTUAL ARENA',
+      weightClasses: '3LB • 12LB • 30LB',
+      numMatches: '12 MATCHES',
+      numCompetitors: '24 COMPETITORS',
+      host1Name: 'JOHN DOE',
+      host1Role: 'PLAY-BY-PLAY',
+      host2Name: 'JANE SMITH',
+      host2Role: 'COLOR COMMENTARY',
+      host3Name: 'MIKE JONES',
+      host3Role: 'RINGSIDE ANALYST',
+      twitterHandle: '@GSCRL',
+      facebookHandle: '/GSCRL',
+      instagramHandle: '@GSCRL',
+      twitchHandle: 'GSCRL',
+      accentColor: '#FF6B6B',
+      showHosts: true,
+      showSocial: true,
+      showSponsors: true
+    };
+
+    // ========================================
+    // DOM Elements
+    // ========================================
+    const welcomeContainer = document.getElementById('welcomeContainer');
+    const eventLogoEl = document.getElementById('eventLogo');
+    const eventSubtitleEl = document.getElementById('eventSubtitle');
+    const welcomeTitleEl = document.getElementById('welcomeTitle');
+    const eventNameEl = document.getElementById('eventName');
+    const finalMessageEl = document.getElementById('finalMessage');
+    const eventDateEl = document.getElementById('eventDate');
+    const eventLocationEl = document.getElementById('eventLocation');
+    const weightClassesEl = document.getElementById('weightClasses');
+    const numMatchesEl = document.getElementById('numMatches');
+    const numCompetitorsEl = document.getElementById('numCompetitors');
+    const host1NameEl = document.getElementById('host1Name');
+    const host1RoleEl = document.getElementById('host1Role');
+    const host2NameEl = document.getElementById('host2Name');
+    const host2RoleEl = document.getElementById('host2Role');
+    const host3NameEl = document.getElementById('host3Name');
+    const host3RoleEl = document.getElementById('host3Role');
+    const twitterHandleEl = document.getElementById('twitterHandle');
+    const facebookHandleEl = document.getElementById('facebookHandle');
+    const instagramHandleEl = document.getElementById('instagramHandle');
+    const twitchHandleEl = document.getElementById('twitchHandle');
+    
+    // Settings elements
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const eventLogoInput = document.getElementById('eventLogoInput');
+    const eventSubtitleInput = document.getElementById('eventSubtitleInput');
+    const welcomeTitleInput = document.getElementById('welcomeTitleInput');
+    const eventNameInput = document.getElementById('eventNameInput');
+    const finalMessageInput = document.getElementById('finalMessageInput');
+    const eventDateInput = document.getElementById('eventDateInput');
+    const eventLocationInput = document.getElementById('eventLocationInput');
+    const weightClassesInput = document.getElementById('weightClassesInput');
+    const numMatchesInput = document.getElementById('numMatchesInput');
+    const numCompetitorsInput = document.getElementById('numCompetitorsInput');
+    const host1NameInput = document.getElementById('host1NameInput');
+    const host1RoleInput = document.getElementById('host1RoleInput');
+    const host2NameInput = document.getElementById('host2NameInput');
+    const host2RoleInput = document.getElementById('host2RoleInput');
+    const host3NameInput = document.getElementById('host3NameInput');
+    const host3RoleInput = document.getElementById('host3RoleInput');
+    const twitterHandleInput = document.getElementById('twitterHandleInput');
+    const facebookHandleInput = document.getElementById('facebookHandleInput');
+    const instagramHandleInput = document.getElementById('instagramHandleInput');
+    const twitchHandleInput = document.getElementById('twitchHandleInput');
+    const accentColorInput = document.getElementById('accentColorInput');
+    const showHostsCheckbox = document.getElementById('showHostsCheckbox');
+    const showSocialCheckbox = document.getElementById('showSocialCheckbox');
+    const showSponsorsCheckbox = document.getElementById('showSponsorsCheckbox');
+    const applySettingsBtn = document.getElementById('applySettings');
+
+    // ========================================
+    // URL Parameter Parsing
+    // ========================================
+    function parseUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Main settings
+      if (params.has('logo')) {
+        state.eventLogo = decodeURIComponent(params.get('logo'));
+        eventLogoInput.value = state.eventLogo;
+      }
+
+      if (params.has('subtitle')) {
+        state.eventSubtitle = decodeURIComponent(params.get('subtitle')).toUpperCase();
+        eventSubtitleInput.value = state.eventSubtitle;
+      }
+
+      if (params.has('welcometitle')) {
+        state.welcomeTitle = decodeURIComponent(params.get('welcometitle')).toUpperCase();
+        welcomeTitleInput.value = state.welcomeTitle;
+      }
+
+      if (params.has('event')) {
+        state.eventName = decodeURIComponent(params.get('event')).toUpperCase();
+        eventNameInput.value = state.eventName;
+      }
+
+      if (params.has('final')) {
+        state.finalMessage = decodeURIComponent(params.get('final')).toUpperCase();
+        finalMessageInput.value = state.finalMessage;
+      }
+
+      // Event details
+      if (params.has('date')) {
+        state.eventDate = decodeURIComponent(params.get('date')).toUpperCase();
+        eventDateInput.value = state.eventDate;
+      }
+
+      if (params.has('location')) {
+        state.eventLocation = decodeURIComponent(params.get('location')).toUpperCase();
+        eventLocationInput.value = state.eventLocation;
+      }
+
+      if (params.has('weights')) {
+        state.weightClasses = decodeURIComponent(params.get('weights')).toUpperCase();
+        weightClassesInput.value = state.weightClasses;
+      }
+
+      if (params.has('matches')) {
+        state.numMatches = decodeURIComponent(params.get('matches')).toUpperCase();
+        numMatchesInput.value = state.numMatches;
+      }
+
+      if (params.has('competitors')) {
+        state.numCompetitors = decodeURIComponent(params.get('competitors')).toUpperCase();
+        numCompetitorsInput.value = state.numCompetitors;
+      }
+
+      // Hosts
+      if (params.has('host1name')) {
+        state.host1Name = decodeURIComponent(params.get('host1name')).toUpperCase();
+        host1NameInput.value = state.host1Name;
+      }
+
+      if (params.has('host1role')) {
+        state.host1Role = decodeURIComponent(params.get('host1role')).toUpperCase();
+        host1RoleInput.value = state.host1Role;
+      }
+
+      if (params.has('host2name')) {
+        state.host2Name = decodeURIComponent(params.get('host2name')).toUpperCase();
+        host2NameInput.value = state.host2Name;
+      }
+
+      if (params.has('host2role')) {
+        state.host2Role = decodeURIComponent(params.get('host2role')).toUpperCase();
+        host2RoleInput.value = state.host2Role;
+      }
+
+      if (params.has('host3name')) {
+        state.host3Name = decodeURIComponent(params.get('host3name')).toUpperCase();
+        host3NameInput.value = state.host3Name;
+      }
+
+      if (params.has('host3role')) {
+        state.host3Role = decodeURIComponent(params.get('host3role')).toUpperCase();
+        host3RoleInput.value = state.host3Role;
+      }
+
+      // Social media
+      if (params.has('twitter')) {
+        state.twitterHandle = params.get('twitter');
+        twitterHandleInput.value = state.twitterHandle;
+      }
+
+      if (params.has('facebook')) {
+        state.facebookHandle = params.get('facebook');
+        facebookHandleInput.value = state.facebookHandle;
+      }
+
+      if (params.has('instagram')) {
+        state.instagramHandle = params.get('instagram');
+        instagramHandleInput.value = state.instagramHandle;
+      }
+
+      if (params.has('twitch')) {
+        state.twitchHandle = params.get('twitch');
+        twitchHandleInput.value = state.twitchHandle;
+      }
+
+      // Display options
+      if (params.get('showhosts') === 'false') {
+        state.showHosts = false;
+        showHostsCheckbox.checked = false;
+      }
+
+      if (params.get('showsocial') === 'false') {
+        state.showSocial = false;
+        showSocialCheckbox.checked = false;
+      }
+
+      if (params.get('showsponsors') === 'false') {
+        state.showSponsors = false;
+        showSponsorsCheckbox.checked = false;
+      }
+
+      // Color
+      if (params.has('color')) {
+        const color = parseColorParam(params.get('color'));
+        if (color) {
+          state.accentColor = color;
+          accentColorInput.value = color;
+        }
+      }
+    }
+
+    // ========================================
+    // Display Functions
+    // ========================================
+    function updateDisplay() {
+      // Main content
+      eventLogoEl.textContent = state.eventLogo;
+      eventSubtitleEl.textContent = state.eventSubtitle;
+      
+      const welcomeTitleText = `${state.welcomeTitle} <span class="highlight">${state.eventName}</span>`;
+      welcomeTitleEl.innerHTML = welcomeTitleText;
+      
+      finalMessageEl.textContent = state.finalMessage;
+
+      // Event details
+      eventDateEl.textContent = state.eventDate;
+      eventLocationEl.textContent = state.eventLocation;
+      weightClassesEl.textContent = state.weightClasses;
+      numMatchesEl.textContent = state.numMatches;
+      numCompetitorsEl.textContent = state.numCompetitors;
+
+      // Hosts
+      host1NameEl.textContent = state.host1Name;
+      host1RoleEl.textContent = state.host1Role;
+      host2NameEl.textContent = state.host2Name;
+      host2RoleEl.textContent = state.host2Role;
+      host3NameEl.textContent = state.host3Name;
+      host3RoleEl.textContent = state.host3Role;
+
+      // Social media
+      twitterHandleEl.textContent = state.twitterHandle;
+      facebookHandleEl.textContent = state.facebookHandle;
+      instagramHandleEl.textContent = state.instagramHandle;
+      twitchHandleEl.textContent = state.twitchHandle;
+
+      // Display options
+      const hostsSection = document.querySelector('.hosts-section');
+      const socialSection = document.querySelector('.social-showcase');
+      const sponsorsSection = document.querySelector('.sponsors-section');
+
+      if (hostsSection) {
+        hostsSection.style.display = state.showHosts ? '' : 'none';
+      }
+
+      if (socialSection) {
+        socialSection.style.display = state.showSocial ? '' : 'none';
+      }
+
+      if (sponsorsSection) {
+        sponsorsSection.style.display = state.showSponsors ? '' : 'none';
+      }
+
+      // Apply theme color
+      applyThemeColor(state.accentColor);
+    }
+
+    function applyThemeColor(color) {
+      document.documentElement.style.setProperty('--gscrl-primary', color);
+      document.documentElement.style.setProperty('--glow-color', color);
+    }
+
+    // ========================================
+    // Settings Functions
+    // ========================================
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem('gscrl-welcome-screen-settings');
+        if (saved) {
+          const settings = JSON.parse(saved);
+          state = { ...state, ...settings };
+          
+          // Update form inputs
+          eventLogoInput.value = state.eventLogo || eventLogoInput.value;
+          eventSubtitleInput.value = state.eventSubtitle || eventSubtitleInput.value;
+          welcomeTitleInput.value = state.welcomeTitle || welcomeTitleInput.value;
+          eventNameInput.value = state.eventName || eventNameInput.value;
+          finalMessageInput.value = state.finalMessage || finalMessageInput.value;
+          eventDateInput.value = state.eventDate || eventDateInput.value;
+          eventLocationInput.value = state.eventLocation || eventLocationInput.value;
+          weightClassesInput.value = state.weightClasses || weightClassesInput.value;
+          numMatchesInput.value = state.numMatches || numMatchesInput.value;
+          numCompetitorsInput.value = state.numCompetitors || numCompetitorsInput.value;
+          host1NameInput.value = state.host1Name || host1NameInput.value;
+          host1RoleInput.value = state.host1Role || host1RoleInput.value;
+          host2NameInput.value = state.host2Name || host2NameInput.value;
+          host2RoleInput.value = state.host2Role || host2RoleInput.value;
+          host3NameInput.value = state.host3Name || host3NameInput.value;
+          host3RoleInput.value = state.host3Role || host3RoleInput.value;
+          twitterHandleInput.value = state.twitterHandle || twitterHandleInput.value;
+          facebookHandleInput.value = state.facebookHandle || facebookHandleInput.value;
+          instagramHandleInput.value = state.instagramHandle || instagramHandleInput.value;
+          twitchHandleInput.value = state.twitchHandle || twitchHandleInput.value;
+          accentColorInput.value = state.accentColor || accentColorInput.value;
+          showHostsCheckbox.checked = state.showHosts !== false;
+          showSocialCheckbox.checked = state.showSocial !== false;
+          showSponsorsCheckbox.checked = state.showSponsors !== false;
+        }
+      } catch (e) {
+        console.warn('Failed to load welcome screen settings:', e);
+      }
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem('gscrl-welcome-screen-settings', JSON.stringify(state));
+      } catch (e) {
+        console.warn('Failed to save welcome screen settings:', e);
+      }
+    }
+
+    // ========================================
+    // Event Listeners
+    // ========================================
+    settingsToggle.addEventListener('click', () => {
+      settingsPanel.classList.toggle('open');
+    });
+
+    applySettingsBtn.addEventListener('click', () => {
+      // Update state from form inputs
+      state.eventLogo = eventLogoInput.value;
+      state.eventSubtitle = eventSubtitleInput.value.toUpperCase();
+      state.welcomeTitle = welcomeTitleInput.value.toUpperCase();
+      state.eventName = eventNameInput.value.toUpperCase();
+      state.finalMessage = finalMessageInput.value.toUpperCase();
+      state.eventDate = eventDateInput.value.toUpperCase();
+      state.eventLocation = eventLocationInput.value.toUpperCase();
+      state.weightClasses = weightClassesInput.value.toUpperCase();
+      state.numMatches = numMatchesInput.value.toUpperCase();
+      state.numCompetitors = numCompetitorsInput.value.toUpperCase();
+      state.host1Name = host1NameInput.value.toUpperCase();
+      state.host1Role = host1RoleInput.value.toUpperCase();
+      state.host2Name = host2NameInput.value.toUpperCase();
+      state.host2Role = host2RoleInput.value.toUpperCase();
+      state.host3Name = host3NameInput.value.toUpperCase();
+      state.host3Role = host3RoleInput.value.toUpperCase();
+      state.twitterHandle = twitterHandleInput.value;
+      state.facebookHandle = facebookHandleInput.value;
+      state.instagramHandle = instagramHandleInput.value;
+      state.twitchHandle = twitchHandleInput.value;
+      state.accentColor = accentColorInput.value;
+      state.showHosts = showHostsCheckbox.checked;
+      state.showSocial = showSocialCheckbox.checked;
+      state.showSponsors = showSponsorsCheckbox.checked;
+
+      // Update display and save
+      updateDisplay();
+      saveSettings();
+
+      // Close panel
+      settingsPanel.classList.remove('open');
+    });
+
+    // ========================================
+    // Initialize
+    // ========================================
+    function init() {
+      loadSettings();
+      parseUrlParams(); // URL params override localStorage
+      updateDisplay();
+    }
+
+    init();
+  </script>
+</body>
+</html>
