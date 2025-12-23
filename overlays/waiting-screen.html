@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waiting Screen - GSCRL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/styles.css">
+  <style>
+    /* ========================================
+       Waiting Screen Specific Styles
+       ======================================== */
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--space-4);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .waiting-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      gap: var(--space-8);
+    }
+
+    /* Logo/Title Section */
+    .waiting-logo {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 400;
+      color: var(--gscrl-light);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: var(--space-2);
+    }
+
+    .waiting-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      color: var(--gscrl-gray);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Main Message */
+    .waiting-message {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--gscrl-light);
+      text-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      margin: var(--space-6) 0;
+      animation: fadeIn 1s ease-out;
+    }
+
+    /* Countdown Section */
+    .countdown-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+
+    .countdown-label {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .countdown-timer {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 8rem);
+      color: var(--gscrl-primary);
+      text-shadow: var(--glow-strong) var(--glow-color);
+      letter-spacing: 0.1em;
+      line-height: 1;
+    }
+
+    /* Loading Animation */
+    .loading-animation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      margin: var(--space-6) 0;
+    }
+
+    .loading-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gscrl-primary);
+      animation: loadingPulse 1.5s infinite ease-in-out;
+      box-shadow: 0 0 10px var(--gscrl-primary);
+    }
+
+    .loading-dot:nth-child(1) { animation-delay: 0s; }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    .loading-text {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Event Info Section */
+    .event-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      margin: var(--space-6) 0;
+      padding: var(--space-6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      background: rgba(26, 26, 46, 0.5);
+      backdrop-filter: blur(5px);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .event-info-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-3);
+      position: relative;
+    }
+
+    .event-info-title::after {
+      content: '';
+      position: absolute;
+      bottom: -var(--space-2);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: var(--gscrl-primary);
+    }
+
+    .event-detail {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: var(--space-2) var(--space-4);
+      background: rgba(26, 26, 46, 0.8);
+      border-radius: var(--radius-md);
+    }
+
+    .event-detail-label,
+    .event-detail-value {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-light);
+    }
+
+    .event-detail-label {
+      color: var(--gscrl-gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Social Media Section */
+    .social-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+
+    .social-title {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      color: var(--gscrl-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .social-handles {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-handle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-base);
+    }
+
+    .social-handle:hover {
+      background: rgba(255, 107, 107, 0.2);
+      border-color: var(--gscrl-primary);
+      transform: translateY(-2px);
+    }
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--gscrl-primary);
+    }
+
+    .social-text {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-light);
+      font-weight: 500;
+    }
+
+    /* Technical Info Section */
+    .technical-info {
+      position: fixed;
+      bottom: var(--space-4);
+      right: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      padding: var(--space-3);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--gscrl-gray);
+      text-align: left;
+      max-width: 300px;
+    }
+
+    .tech-label {
+      color: var(--gscrl-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-1);
+    }
+
+    .tech-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-success);
+      box-shadow: 0 0 5px var(--color-success);
+    }
+
+    .status-indicator.warning {
+      background: var(--color-warning);
+      box-shadow: 0 0 5px var(--color-warning);
+    }
+
+    .status-indicator.error {
+      background: var(--color-danger);
+      box-shadow: 0 0 5px var(--color-danger);
+    }
+
+    /* Animations */
+    @keyframes loadingPulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      50% { 
+        transform: scale(1.5);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+
+    /* Settings Panel - Waiting Screen Specific */
+    .waiting-settings {
+      padding: var(--space-4);
+    }
+
+    .settings-section.waiting {
+      margin-bottom: var(--space-6);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .waiting-container {
+        gap: var(--space-6);
+        padding: var(--space-3);
+      }
+
+      .waiting-message {
+        font-size: clamp(1.5rem, 8vw, 3rem);
+      }
+
+      .countdown-timer {
+        font-size: clamp(2rem, 12vw, 6rem);
+      }
+
+      .event-info {
+        padding: var(--space-4);
+      }
+
+      .technical-info {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: var(--space-6);
+        align-self: stretch;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .waiting-logo {
+        font-size: clamp(2rem, 12vw, 4rem);
+      }
+
+      .loading-animation {
+        gap: var(--space-2);
+      }
+
+      .loading-dot {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Waiting Screen Display -->
+  <div class="waiting-container" id="waitingContainer">
+    <!-- Logo/Title -->
+    <div class="waiting-header">
+      <div class="waiting-logo" id="eventLogo">GSCRL</div>
+      <div class="waiting-subtitle" id="eventSubtitle">ROBOT COMBAT LEAGUE</div>
+    </div>
+
+    <!-- Main Message -->
+    <div class="waiting-message" id="mainMessage">STREAM STARTING SOON</div>
+
+    <!-- Countdown Section -->
+    <div class="countdown-section">
+      <div class="countdown-label" id="countdownLabel">ESTIMATED START TIME</div>
+      <div class="countdown-timer" id="countdownTimer">14:30</div>
+    </div>
+
+    <!-- Loading Animation -->
+    <div class="loading-animation">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-text" id="loadingText">LOADING STREAM</div>
+    </div>
+
+    <!-- Event Info Section -->
+    <div class="event-info">
+      <div class="event-info-title">EVENT INFORMATION</div>
+      
+      <div class="event-detail">
+        <span class="event-detail-label">Event:</span>
+        <span class="event-detail-value" id="eventName">Summer Showdown</span>
+      </div>
+
+      <div class="event-detail">
+        <span class="event-detail-label">Date:</span>
+        <span class="event-detail-value" id="eventDate">June 15, 2024</span>
+      </div>
+
+      <div class="event-detail">
+        <span class="event-detail-label">Location:</span>
+        <span class="event-detail-value" id="eventLocation">Virtual Arena</span>
+      </div>
+
+      <div class="event-detail">
+        <span class="event-detail-label">Weight Classes:</span>
+        <span class="event-detail-value" id="weightClasses">3lb, 12lb, 30lb</span>
+      </div>
+    </div>
+
+    <!-- Social Media Section -->
+    <div class="social-section">
+      <div class="social-title">CONNECT WITH US</div>
+      
+      <div class="social-handles">
+        <div class="social-handle">
+          <span class="social-icon">🐦</span>
+          <span class="social-text" id="twitterHandle">@GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">📘</span>
+          <span class="social-text" id="facebookHandle">/GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">📷</span>
+          <span class="social-text" id="instagramHandle">@GSCRL</span>
+        </div>
+
+        <div class="social-handle">
+          <span class="social-icon">🎮</span>
+          <span class="social-text" id="twitchHandle">GSCRL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Info Section -->
+    <div class="technical-info">
+      <div class="tech-label">TECHNICAL STATUS</div>
+      
+      <div class="tech-status">
+        <span class="status-indicator"></span>
+        <span>Audio: Testing...</span>
+      </div>
+
+      <div class="tech-status">
+        <span class="status-indicator"></span>
+        <span>Video: Testing...</span>
+      </div>
+
+      <div class="tech-status">
+        <span class="status-indicator warning"></span>
+        <span>Stream: Connecting...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Toggle -->
+  <button class="settings-toggle" id="settingsToggle">&#9881;</button>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <div class="waiting-settings">
+      <div class="settings-section waiting">
+        <h3 class="section-title">MAIN SETTINGS</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="mainMessageInput">Main Message</label>
+          <input type="text" class="form-input" id="mainMessageInput" 
+                 value="STREAM STARTING SOON" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="countdownTimerInput">Estimated Start Time</label>
+          <input type="text" class="form-input" id="countdownTimerInput" 
+                 value="14:30" maxlength="5">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="countdownLabelInput">Countdown Label</label>
+          <input type="text" class="form-input" id="countdownLabelInput" 
+                 value="ESTIMATED START TIME" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loadingTextInput">Loading Text</label>
+          <input type="text" class="form-input" id="loadingTextInput" 
+                 value="LOADING STREAM" maxlength="30">
+        </div>
+      </div>
+
+      <div class="settings-section waiting">
+        <h3 class="section-title">EVENT INFORMATION</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="eventLogoInput">Event Logo Text</label>
+          <input type="text" class="form-input" id="eventLogoInput" 
+                 value="GSCRL" maxlength="20">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventSubtitleInput">Event Subtitle</label>
+          <input type="text" class="form-input" id="eventSubtitleInput" 
+                 value="ROBOT COMBAT LEAGUE" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventNameInput">Event Name</label>
+          <input type="text" class="form-input" id="eventNameInput" 
+                 value="Summer Showdown" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventDateInput">Event Date</label>
+          <input type="text" class="form-input" id="eventDateInput" 
+                 value="June 15, 2024" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="eventLocationInput">Event Location</label>
+          <input type="text" class="form-input" id="eventLocationInput" 
+                 value="Virtual Arena" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="weightClassesInput">Weight Classes</label>
+          <input type="text" class="form-input" id="weightClassesInput" 
+                 value="3lb, 12lb, 30lb" maxlength="50">
+        </div>
+      </div>
+
+      <div class="settings-section waiting">
+        <h3 class="section-title">SOCIAL MEDIA</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="twitterHandleInput">Twitter Handle</label>
+          <input type="text" class="form-input" id="twitterHandleInput" 
+                 value="@GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="facebookHandleInput">Facebook Handle</label>
+          <input type="text" class="form-input" id="facebookHandleInput" 
+                 value="/GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="instagramHandleInput">Instagram Handle</label>
+          <input type="text" class="form-input" id="instagramHandleInput" 
+                 value="@GSCRL" maxlength="30">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="twitchHandleInput">Twitch Handle</label>
+          <input type="text" class="form-input" id="twitchHandleInput" 
+                 value="GSCRL" maxlength="30">
+        </div>
+      </div>
+
+      <div class="settings-section waiting">
+        <h3 class="section-title">DISPLAY OPTIONS</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="accentColorInput">Accent Color</label>
+          <input type="color" class="form-input" id="accentColorInput" value="#FF6B6B">
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showEventInfoCheckbox" checked>
+            <span>Show Event Information</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showSocialCheckbox" checked>
+            <span>Show Social Media</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showTechnicalInfoCheckbox" checked>
+            <span>Show Technical Info</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn--primary" id="applySettings" style="width: 100%;">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script>
+    // ========================================
+    // Waiting Screen State
+    // ========================================
+    let state = {
+      mainMessage: 'STREAM STARTING SOON',
+      countdownTimer: '14:30',
+      countdownLabel: 'ESTIMATED START TIME',
+      loadingText: 'LOADING STREAM',
+      eventLogo: 'GSCRL',
+      eventSubtitle: 'ROBOT COMBAT LEAGUE',
+      eventName: 'Summer Showdown',
+      eventDate: 'June 15, 2024',
+      eventLocation: 'Virtual Arena',
+      weightClasses: '3lb, 12lb, 30lb',
+      twitterHandle: '@GSCRL',
+      facebookHandle: '/GSCRL',
+      instagramHandle: '@GSCRL',
+      twitchHandle: 'GSCRL',
+      accentColor: '#FF6B6B',
+      showEventInfo: true,
+      showSocial: true,
+      showTechnicalInfo: true
+    };
+
+    // ========================================
+    // DOM Elements
+    // ========================================
+    const waitingContainer = document.getElementById('waitingContainer');
+    const mainMessageEl = document.getElementById('mainMessage');
+    const countdownTimerEl = document.getElementById('countdownTimer');
+    const countdownLabelEl = document.getElementById('countdownLabel');
+    const loadingTextEl = document.getElementById('loadingText');
+    const eventLogoEl = document.getElementById('eventLogo');
+    const eventSubtitleEl = document.getElementById('eventSubtitle');
+    const eventNameEl = document.getElementById('eventName');
+    const eventDateEl = document.getElementById('eventDate');
+    const eventLocationEl = document.getElementById('eventLocation');
+    const weightClassesEl = document.getElementById('weightClasses');
+    const twitterHandleEl = document.getElementById('twitterHandle');
+    const facebookHandleEl = document.getElementById('facebookHandle');
+    const instagramHandleEl = document.getElementById('instagramHandle');
+    const twitchHandleEl = document.getElementById('twitchHandle');
+    
+    // Settings elements
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const mainMessageInput = document.getElementById('mainMessageInput');
+    const countdownTimerInput = document.getElementById('countdownTimerInput');
+    const countdownLabelInput = document.getElementById('countdownLabelInput');
+    const loadingTextInput = document.getElementById('loadingTextInput');
+    const eventLogoInput = document.getElementById('eventLogoInput');
+    const eventSubtitleInput = document.getElementById('eventSubtitleInput');
+    const eventNameInput = document.getElementById('eventNameInput');
+    const eventDateInput = document.getElementById('eventDateInput');
+    const eventLocationInput = document.getElementById('eventLocationInput');
+    const weightClassesInput = document.getElementById('weightClassesInput');
+    const twitterHandleInput = document.getElementById('twitterHandleInput');
+    const facebookHandleInput = document.getElementById('facebookHandleInput');
+    const instagramHandleInput = document.getElementById('instagramHandleInput');
+    const twitchHandleInput = document.getElementById('twitchHandleInput');
+    const accentColorInput = document.getElementById('accentColorInput');
+    const showEventInfoCheckbox = document.getElementById('showEventInfoCheckbox');
+    const showSocialCheckbox = document.getElementById('showSocialCheckbox');
+    const showTechnicalInfoCheckbox = document.getElementById('showTechnicalInfoCheckbox');
+    const applySettingsBtn = document.getElementById('applySettings');
+
+    // ========================================
+    // URL Parameter Parsing
+    // ========================================
+    function parseUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Main content
+      if (params.has('message')) {
+        state.mainMessage = decodeURIComponent(params.get('message')).toUpperCase();
+        mainMessageInput.value = state.mainMessage;
+      }
+
+      if (params.has('start')) {
+        state.countdownTimer = params.get('start');
+        countdownTimerInput.value = state.countdownTimer;
+      }
+
+      if (params.has('label')) {
+        state.countdownLabel = decodeURIComponent(params.get('label')).toUpperCase();
+        countdownLabelInput.value = state.countdownLabel;
+      }
+
+      if (params.has('loading')) {
+        state.loadingText = decodeURIComponent(params.get('loading')).toUpperCase();
+        loadingTextInput.value = state.loadingText;
+      }
+
+      // Event info
+      if (params.has('logo')) {
+        state.eventLogo = decodeURIComponent(params.get('logo'));
+        eventLogoInput.value = state.eventLogo;
+      }
+
+      if (params.has('subtitle')) {
+        state.eventSubtitle = decodeURIComponent(params.get('subtitle')).toUpperCase();
+        eventSubtitleInput.value = state.eventSubtitle;
+      }
+
+      if (params.has('event')) {
+        state.eventName = decodeURIComponent(params.get('event'));
+        eventNameInput.value = state.eventName;
+      }
+
+      if (params.has('date')) {
+        state.eventDate = decodeURIComponent(params.get('date'));
+        eventDateInput.value = state.eventDate;
+      }
+
+      if (params.has('location')) {
+        state.eventLocation = decodeURIComponent(params.get('location'));
+        eventLocationInput.value = state.eventLocation;
+      }
+
+      if (params.has('weights')) {
+        state.weightClasses = decodeURIComponent(params.get('weights'));
+        weightClassesInput.value = state.weightClasses;
+      }
+
+      // Social media
+      if (params.has('twitter')) {
+        state.twitterHandle = params.get('twitter');
+        twitterHandleInput.value = state.twitterHandle;
+      }
+
+      if (params.has('facebook')) {
+        state.facebookHandle = params.get('facebook');
+        facebookHandleInput.value = state.facebookHandle;
+      }
+
+      if (params.has('instagram')) {
+        state.instagramHandle = params.get('instagram');
+        instagramHandleInput.value = state.instagramHandle;
+      }
+
+      if (params.has('twitch')) {
+        state.twitchHandle = params.get('twitch');
+        twitchHandleInput.value = state.twitchHandle;
+      }
+
+      // Display options
+      if (params.get('showinfo') === 'false') {
+        state.showEventInfo = false;
+        showEventInfoCheckbox.checked = false;
+      }
+
+      if (params.get('showsocial') === 'false') {
+        state.showSocial = false;
+        showSocialCheckbox.checked = false;
+      }
+
+      if (params.get('showtech') === 'false') {
+        state.showTechnicalInfo = false;
+        showTechnicalInfoCheckbox.checked = false;
+      }
+
+      // Color
+      if (params.has('color')) {
+        const color = parseColorParam(params.get('color'));
+        if (color) {
+          state.accentColor = color;
+          accentColorInput.value = color;
+        }
+      }
+    }
+
+    // ========================================
+    // Display Functions
+    // ========================================
+    function updateDisplay() {
+      // Main content
+      mainMessageEl.textContent = state.mainMessage;
+      countdownTimerEl.textContent = state.countdownTimer;
+      countdownLabelEl.textContent = state.countdownLabel;
+      loadingTextEl.textContent = state.loadingText;
+
+      // Event info
+      eventLogoEl.textContent = state.eventLogo;
+      eventSubtitleEl.textContent = state.eventSubtitle;
+      eventNameEl.textContent = state.eventName;
+      eventDateEl.textContent = state.eventDate;
+      eventLocationEl.textContent = state.eventLocation;
+      weightClassesEl.textContent = state.weightClasses;
+
+      // Social media
+      twitterHandleEl.textContent = state.twitterHandle;
+      facebookHandleEl.textContent = state.facebookHandle;
+      instagramHandleEl.textContent = state.instagramHandle;
+      twitchHandleEl.textContent = state.twitchHandle;
+
+      // Display options
+      const eventInfoSection = document.querySelector('.event-info');
+      const socialSection = document.querySelector('.social-section');
+      const technicalInfoSection = document.querySelector('.technical-info');
+
+      if (eventInfoSection) {
+        eventInfoSection.style.display = state.showEventInfo ? '' : 'none';
+      }
+
+      if (socialSection) {
+        socialSection.style.display = state.showSocial ? '' : 'none';
+      }
+
+      if (technicalInfoSection) {
+        technicalInfoSection.style.display = state.showTechnicalInfo ? '' : 'none';
+      }
+
+      // Apply theme color
+      applyThemeColor(state.accentColor);
+    }
+
+    function applyThemeColor(color) {
+      document.documentElement.style.setProperty('--gscrl-primary', color);
+      document.documentElement.style.setProperty('--glow-color', color);
+    }
+
+    // ========================================
+    // Settings Functions
+    // ========================================
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem('gscrl-waiting-screen-settings');
+        if (saved) {
+          const settings = JSON.parse(saved);
+          state = { ...state, ...settings };
+          
+          // Update form inputs
+          mainMessageInput.value = state.mainMessage || mainMessageInput.value;
+          countdownTimerInput.value = state.countdownTimer || countdownTimerInput.value;
+          countdownLabelInput.value = state.countdownLabel || countdownLabelInput.value;
+          loadingTextInput.value = state.loadingText || loadingTextInput.value;
+          eventLogoInput.value = state.eventLogo || eventLogoInput.value;
+          eventSubtitleInput.value = state.eventSubtitle || eventSubtitleInput.value;
+          eventNameInput.value = state.eventName || eventNameInput.value;
+          eventDateInput.value = state.eventDate || eventDateInput.value;
+          eventLocationInput.value = state.eventLocation || eventLocationInput.value;
+          weightClassesInput.value = state.weightClasses || weightClassesInput.value;
+          twitterHandleInput.value = state.twitterHandle || twitterHandleInput.value;
+          facebookHandleInput.value = state.facebookHandle || facebookHandleInput.value;
+          instagramHandleInput.value = state.instagramHandle || instagramHandleInput.value;
+          twitchHandleInput.value = state.twitchHandle || twitchHandleInput.value;
+          accentColorInput.value = state.accentColor || accentColorInput.value;
+          showEventInfoCheckbox.checked = state.showEventInfo !== false;
+          showSocialCheckbox.checked = state.showSocial !== false;
+          showTechnicalInfoCheckbox.checked = state.showTechnicalInfo !== false;
+        }
+      } catch (e) {
+        console.warn('Failed to load waiting screen settings:', e);
+      }
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem('gscrl-waiting-screen-settings', JSON.stringify(state));
+      } catch (e) {
+        console.warn('Failed to save waiting screen settings:', e);
+      }
+    }
+
+    // ========================================
+    // Event Listeners
+    // ========================================
+    settingsToggle.addEventListener('click', () => {
+      settingsPanel.classList.toggle('open');
+    });
+
+    applySettingsBtn.addEventListener('click', () => {
+      // Update state from form inputs
+      state.mainMessage = mainMessageInput.value.toUpperCase();
+      state.countdownTimer = countdownTimerInput.value;
+      state.countdownLabel = countdownLabelInput.value.toUpperCase();
+      state.loadingText = loadingTextInput.value.toUpperCase();
+      state.eventLogo = eventLogoInput.value;
+      state.eventSubtitle = eventSubtitleInput.value.toUpperCase();
+      state.eventName = eventNameInput.value;
+      state.eventDate = eventDateInput.value;
+      state.eventLocation = eventLocationInput.value;
+      state.weightClasses = weightClassesInput.value;
+      state.twitterHandle = twitterHandleInput.value;
+      state.facebookHandle = facebookHandleInput.value;
+      state.instagramHandle = instagramHandleInput.value;
+      state.twitchHandle = twitchHandleInput.value;
+      state.accentColor = accentColorInput.value;
+      state.showEventInfo = showEventInfoCheckbox.checked;
+      state.showSocial = showSocialCheckbox.checked;
+      state.showTechnicalInfo = showTechnicalInfoCheckbox.checked;
+
+      // Update display and save
+      updateDisplay();
+      saveSettings();
+
+      // Close panel
+      settingsPanel.classList.remove('open');
+    });
+
+    // ========================================
+    // Initialize
+    // ========================================
+    function init() {
+      loadSettings();
+      parseUrlParams(); // URL params override localStorage
+      updateDisplay();
+    }
+
+    init();
+  </script>
+</body>
+</html>
