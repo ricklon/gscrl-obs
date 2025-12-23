@@ -1,0 +1,73 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Logs
+logs
+*.log
+
+# Runtime data
+data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Build output
+build/
+dist/
+out/
+
+# Dependency directories
+jspm_packages/
+
+# IDE/config files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.test
+.env*.local
+
+# Temporary files
+*.tmp
+*.bak
+
+# Coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Cache files
+.cache/
+.parcel-cache/
+.yarn/cache/
+
+# Build artifacts
+*.tgz
+
+# Yarn
+.yarnrc
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# npm
+npm-debug.log*
+
+# Local development server logs
+logs/
+*.log

@@ -1,0 +1,37 @@
+{
+  "name": "gscrl-obs",
+  "version": "1.0.0",
+  "description": "Browser-based OBS overlays for Garden State Robot League live streaming",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "python3 -m http.server 8000",
+    "lint": "echo 'Add ESLint configuration here' && exit 0",
+    "format": "echo 'Add Prettier configuration here' && exit 0",
+    "test": "echo 'Add testing scripts here' && exit 0",
+    "deploy": "echo 'Deployment handled by GitHub Pages' && exit 0"
+  },
+  "keywords": [
+    "obs",
+    "overlay",
+    "streaming",
+    "robot",
+    "combat",
+    "gscrl",
+    "browser-source"
+  ],
+  "author": "Garden State Robot League",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gscrl/gscrl-obs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gscrl/gscrl-obs/issues"
+  },
+  "homepage": "https://github.com/gscrl/gscrl-obs#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
