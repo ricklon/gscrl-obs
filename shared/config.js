@@ -4,7 +4,89 @@
  */
 
 const GSCRLConfig = {
+  // Storage Keys (localStorage)
   // ========================================
+  storageKeys: {
+    breakTimerSettings: 'gscrl-break-timer-settings',
+    matchInfoSettings: 'gscrl-match-info-settings',
+    countdownSettings: 'gscrl-countdown-settings',
+    lowerThirdSettings: 'gscrl-lower-third-settings',
+    globalTheme: 'gscrl-global-theme'
+  }
+=======
+  // ========================================
+  // Storage Keys (localStorage)
+  // ========================================
+  storageKeys: {
+    breakTimerSettings: 'gscrl-break-timer-settings',
+    matchInfoSettings: 'gscrl-match-info-settings',
+    countdownSettings: 'gscrl-countdown-settings',
+    lowerThirdSettings: 'gscrl-lower-third-settings',
+    globalTheme: 'gscrl-global-theme'
+  }Overlay Defaults
+  // ========================================
+  overlays: {
+    breakTimer: {
+      defaultDuration: 10, // minutes
+      defaultLabel: 'BE RIGHT BACK',
+      presets: [5, 10, 15, 20, 30],
+      showControls: true
+    },
+    matchInfo: {
+      defaultWeightClass: '3lb',
+      weightClasses: ['150g', '1lb', '3lb', '12lb', '30lb'],
+      showRecord: true
+    },
+    countdown: {
+      defaultSeconds: 3,
+      finalText: 'FIGHT!',
+      soundEnabled: false
+    },
+    lowerThird: {
+      animationDuration: 500, // ms
+      displayDuration: 5000, // ms (0 = indefinite)
+      style: 'default'
+    },
+    sponsors: {
+      rotationInterval: 10000, // ms
+      transition: 'fade'
+    }
+  },
+=======
+  // ========================================
+  // Overlay Defaults
+  // ========================================
+  overlays: {
+    breakTimer: {
+      defaultDuration: 10, // minutes
+      defaultLabel: 'BE RIGHT BACK',
+      presets: [5, 10, 15, 20, 30],
+      showControls: true
+    },
+    matchInfo: {
+      defaultWeightClass: '3lb',
+      weightClasses: ['150g', '1lb', '3lb', '12lb', '30lb'],
+      defaultStatus: 'UPCOMING',
+      statusOptions: ['UPCOMING', 'IN PROGRESS', 'COMPLETED'],
+      showRecord: true,
+      showEventName: true,
+      defaultTimer: '03:00'
+    },
+    countdown: {
+      defaultSeconds: 3,
+      finalText: 'FIGHT!',
+      soundEnabled: false
+    },
+    lowerThird: {
+      animationDuration: 500, // ms
+      displayDuration: 5000, // ms (0 = indefinite)
+      style: 'default'
+    },
+    sponsors: {
+      rotationInterval: 10000, // ms
+      transition: 'fade'
+    }
+  },========================================
   // Brand Colors
   // ========================================
   colors: {

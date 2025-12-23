@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Info - GSCRL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/styles.css">
+  <style>
+    /* ========================================
+       Match Info Specific Styles
+       ======================================== */
+    
+    body {
+      min-height: 200px;
+      height: 200px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .match-info-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      padding: var(--space-4);
+      box-sizing: border-box;
+    }
+
+    /* Match Header - Event info and status */
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .event-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .event-name {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      letter-spacing: 0.05em;
+      color: var(--gscrl-light);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    .event-meta {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .match-status {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      background: var(--gscrl-primary);
+      color: var(--gscrl-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    .match-status.in-progress {
+      background: var(--color-warning);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .match-status.completed {
+      background: var(--color-success);
+    }
+
+    /* Main Teams Section - Red vs Blue */
+    .match-teams {
+      display: flex;
+      flex: 1;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .team {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .team.red-team {
+      border-color: #ff6b6b;
+    }
+
+    .team.blue-team {
+      border-color: #4ECDC4;
+    }
+
+    .team-header {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .team-header::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .team.red-team .team-header::before {
+      background: #ff6b6b;
+    }
+
+    .team.blue-team .team-header::before {
+      background: #4ECDC4;
+    }
+
+    .player-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--gscrl-light);
+      margin-bottom: var(--space-1);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .bot-name {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--gscrl-light);
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .team.red-team .bot-name {
+      color: #ff6b6b;
+      text-shadow: 0 0 10px #ff6b6b;
+    }
+
+    .team.blue-team .bot-name {
+      color: #4ECDC4;
+      text-shadow: 0 0 10px #4ECDC4;
+    }
+
+    .player-record {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .record-wins {
+      color: var(--color-success);
+    }
+
+    .record-losses {
+      color: var(--color-danger);
+    }
+
+    /* Team Divider - VS indicator */
+    .team-divider {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .vs-indicator {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      color: var(--gscrl-primary);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+      transform: rotate(-15deg);
+      letter-spacing: 0.1em;
+    }
+
+    /* Match Timer */
+    .match-timer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-2) var(--space-4);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      margin-top: auto;
+    }
+
+    .timer-display {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--gscrl-light);
+      letter-spacing: 0.1em;
+    }
+
+    /* Settings Panel - Match Info Specific */
+    .match-info-settings {
+      padding: var(--space-4);
+    }
+
+    .settings-section {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: var(--gscrl-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-3);
+    }
+
+    .team-settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .team-settings > div {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .team-settings .form-label {
+      color: var(--gscrl-primary);
+    }
+
+    .team-settings .team-red .form-label {
+      color: #ff6b6b;
+    }
+
+    .team-settings .team-blue .form-label {
+      color: #4ECDC4;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .match-teams {
+        gap: var(--space-3);
+      }
+
+      .team-divider {
+        width: 60px;
+      }
+
+      .vs-indicator {
+        font-size: var(--text-2xl);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .match-teams {
+        flex-direction: column;
+      }
+
+      .team-divider {
+        flex-direction: row;
+        width: auto;
+        justify-content: space-between;
+        padding: 0 var(--space-4);
+      }
+
+      .team {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Match Info Display -->
+  <div class="match-info-container" id="matchInfoContainer">
+    <div class="match-header">
+      <div class="event-info">
+        <div class="event-name" id="eventName">GSCRL EVENT</div>
+        <div class="event-meta">
+          <span class="weight-class" id="weightClass">3LB CLASS</span>
+          <span class="match-round" id="matchRound">ROUND 1</span>
+        </div>
+      </div>
+      <div class="match-status" id="matchStatus">UPCOMING</div>
+    </div>
+
+    <div class="match-teams">
+      <div class="team red-team">
+        <div class="team-header">RED CORNER</div>
+        <div class="player-name" id="redPlayer">Player 1</div>
+        <div class="bot-name" id="redBot">Bot A</div>
+        <div class="player-record" id="redRecord">
+          <span class="record-wins">0 W</span>
+          <span class="record-losses">0 L</span>
+        </div>
+      </div>
+
+      <div class="team-divider">
+        <div class="vs-indicator">VS</div>
+      </div>
+
+      <div class="team blue-team">
+        <div class="team-header">BLUE CORNER</div>
+        <div class="player-name" id="bluePlayer">Player 2</div>
+        <div class="bot-name" id="blueBot">Bot B</div>
+        <div class="player-record" id="blueRecord">
+          <span class="record-wins">0 W</span>
+          <span class="record-losses">0 L</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="match-timer">
+      <div class="timer-display" id="matchTimer">03:00</div>
+    </div>
+  </div>
+
+  <!-- Settings Toggle -->
+  <button class="settings-toggle" id="settingsToggle">&#9881;</button>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <div class="match-info-settings">
+      <div class="settings-section">
+        <h3 class="section-title">EVENT INFORMATION</h3>
+        
+        <div class="form-group">
+          <label class="form-label" for="eventNameInput">Event Name</label>
+          <input type="text" class="form-input" id="eventNameInput" value="GSCRL EVENT" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="weightClassSelect">Weight Class</label>
+          <select class="form-select" id="weightClassSelect">
+            <option value="150g">150g</option>
+            <option value="1lb">1lb</option>
+            <option value="3lb" selected>3lb</option>
+            <option value="12lb">12lb</option>
+            <option value="30lb">30lb</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchRoundInput">Round</label>
+          <input type="text" class="form-input" id="matchRoundInput" value="1" maxlength="10">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchStatusSelect">Status</label>
+          <select class="form-select" id="matchStatusSelect">
+            <option value="UPCOMING" selected>Upcoming</option>
+            <option value="IN PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchTimerInput">Timer (MM:SS)</label>
+          <input type="text" class="form-input" id="matchTimerInput" value="03:00" maxlength="5">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">TEAM INFORMATION</h3>
+        
+        <div class="team-settings">
+          <div class="team-red">
+            <div class="form-group">
+              <label class="form-label">Red Player Name</label>
+              <input type="text" class="form-input" id="redPlayerInput" value="Player 1" maxlength="30">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Red Bot Name</label>
+              <input type="text" class="form-input" id="redBotInput" value="Bot A" maxlength="30">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Red Record (W-L)</label>
+              <input type="text" class="form-input" id="redRecordInput" value="0-0" maxlength="10">
+            </div>
+          </div>
+
+          <div class="team-blue">
+            <div class="form-group">
+              <label class="form-label">Blue Player Name</label>
+              <input type="text" class="form-input" id="bluePlayerInput" value="Player 2" maxlength="30">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Blue Bot Name</label>
+              <input type="text" class="form-input" id="blueBotInput" value="Bot B" maxlength="30">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Blue Record (W-L)</label>
+              <input type="text" class="form-input" id="blueRecordInput" value="0-0" maxlength="10">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">DISPLAY OPTIONS</h3>
+        
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showRecordsCheckbox" checked>
+            <span>Show Player Records</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showEventNameCheckbox" checked>
+            <span>Show Event Name</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="accentColorInput">Accent Color</label>
+          <input type="color" class="form-input" id="accentColorInput" value="#FF6B6B">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn--primary" id="applySettings" style="width: 100%;">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script>
+    // ========================================
+    // Match Info State
+    // ========================================
+    let state = {
+      eventName: 'GSCRL EVENT',
+      weightClass: '3lb',
+      matchRound: '1',
+      matchStatus: 'UPCOMING',
+      matchTimer: '03:00',
+      redPlayer: 'Player 1',
+      redBot: 'Bot A',
+      redRecord: '0-0',
+      bluePlayer: 'Player 2',
+      blueBot: 'Bot B',
+      blueRecord: '0-0',
+      showRecords: true,
+      showEventName: true,
+      accentColor: '#FF6B6B'
+    };
+
+    // ========================================
+    // DOM Elements
+    // ========================================
+    const matchInfoContainer = document.getElementById('matchInfoContainer');
+    const eventNameEl = document.getElementById('eventName');
+    const weightClassEl = document.getElementById('weightClass');
+    const matchRoundEl = document.getElementById('matchRound');
+    const matchStatusEl = document.getElementById('matchStatus');
+    const matchTimerEl = document.getElementById('matchTimer');
+    const redPlayerEl = document.getElementById('redPlayer');
+    const redBotEl = document.getElementById('redBot');
+    const redRecordEl = document.getElementById('redRecord');
+    const bluePlayerEl = document.getElementById('bluePlayer');
+    const blueBotEl = document.getElementById('blueBot');
+    const blueRecordEl = document.getElementById('blueRecord');
+    
+    // Settings elements
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const eventNameInput = document.getElementById('eventNameInput');
+    const weightClassSelect = document.getElementById('weightClassSelect');
+    const matchRoundInput = document.getElementById('matchRoundInput');
+    const matchStatusSelect = document.getElementById('matchStatusSelect');
+    const matchTimerInput = document.getElementById('matchTimerInput');
+    const redPlayerInput = document.getElementById('redPlayerInput');
+    const redBotInput = document.getElementById('redBotInput');
+    const redRecordInput = document.getElementById('redRecordInput');
+    const bluePlayerInput = document.getElementById('bluePlayerInput');
+    const blueBotInput = document.getElementById('blueBotInput');
+    const blueRecordInput = document.getElementById('blueRecordInput');
+    const showRecordsCheckbox = document.getElementById('showRecordsCheckbox');
+    const showEventNameCheckbox = document.getElementById('showEventNameCheckbox');
+    const accentColorInput = document.getElementById('accentColorInput');
+    const applySettingsBtn = document.getElementById('applySettings');
+
+    // ========================================
+    // URL Parameter Parsing
+    // ========================================
+    function parseUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Event info
+      if (params.has('event')) {
+        state.eventName = decodeURIComponent(params.get('event')).toUpperCase();
+        eventNameInput.value = state.eventName;
+      }
+
+      if (params.has('weightclass')) {
+        const wc = params.get('weightclass').toLowerCase();
+        if (GSCRLConfig.overlays.matchInfo.weightClasses.includes(wc)) {
+          state.weightClass = wc;
+          weightClassSelect.value = wc;
+        }
+      }
+
+      if (params.has('round')) {
+        state.matchRound = params.get('round');
+        matchRoundInput.value = state.matchRound;
+      }
+
+      if (params.has('matchstatus')) {
+        const status = params.get('matchstatus').toUpperCase();
+        if (GSCRLConfig.overlays.matchInfo.statusOptions.includes(status)) {
+          state.matchStatus = status;
+          matchStatusSelect.value = status;
+        }
+      }
+
+      if (params.has('timer')) {
+        const timer = params.get('timer');
+        if (/^\d{2}:\d{2}$/.test(timer)) {
+          state.matchTimer = timer;
+          matchTimerInput.value = timer;
+        }
+      }
+
+      // Team info
+      if (params.has('redplayer')) {
+        state.redPlayer = decodeURIComponent(params.get('redplayer'));
+        redPlayerInput.value = state.redPlayer;
+      }
+
+      if (params.has('redbot')) {
+        state.redBot = decodeURIComponent(params.get('redbot'));
+        redBotInput.value = state.redBot;
+      }
+
+      if (params.has('redrecord')) {
+        state.redRecord = params.get('redrecord');
+        redRecordInput.value = state.redRecord;
+      }
+
+      if (params.has('blueplayer')) {
+        state.bluePlayer = decodeURIComponent(params.get('blueplayer'));
+        bluePlayerInput.value = state.bluePlayer;
+      }
+
+      if (params.has('bluebot')) {
+        state.blueBot = decodeURIComponent(params.get('bluebot'));
+        blueBotInput.value = state.blueBot;
+      }
+
+      if (params.has('bluerecord')) {
+        state.blueRecord = params.get('bluerecord');
+        blueRecordInput.value = state.blueRecord;
+      }
+
+      // Display options
+      if (params.get('showrecords') === 'true') {
+        state.showRecords = true;
+        showRecordsCheckbox.checked = true;
+      } else if (params.get('showrecords') === 'false') {
+        state.showRecords = false;
+        showRecordsCheckbox.checked = false;
+      }
+
+      if (params.get('showevent') === 'true') {
+        state.showEventName = true;
+        showEventNameCheckbox.checked = true;
+      } else if (params.get('showevent') === 'false') {
+        state.showEventName = false;
+        showEventNameCheckbox.checked = false;
+      }
+
+      // Color
+      if (params.has('color')) {
+        const color = parseColorParam(params.get('color'));
+        if (color) {
+          state.accentColor = color;
+          accentColorInput.value = color;
+        }
+      }
+    }
+
+    // ========================================
+    // Display Functions
+    // ========================================
+    function updateDisplay() {
+      // Event info
+      eventNameEl.textContent = state.eventName;
+      weightClassEl.textContent = state.weightClass.toUpperCase() + ' CLASS';
+      matchRoundEl.textContent = 'ROUND ' + state.matchRound;
+      matchTimerEl.textContent = state.matchTimer;
+
+      // Team info
+      redPlayerEl.textContent = state.redPlayer;
+      redBotEl.textContent = state.redBot;
+      bluePlayerEl.textContent = state.bluePlayer;
+      blueBotEl.textContent = state.blueBot;
+
+      // Records
+      if (state.showRecords) {
+        const redParts = state.redRecord.split('-');
+        const blueParts = state.blueRecord.split('-');
+        
+        redRecordEl.innerHTML = `
+          <span class="record-wins">${redParts[0] || 0} W</span>
+          <span class="record-losses">${redParts[1] || 0} L</span>
+        `;
+        
+        blueRecordEl.innerHTML = `
+          <span class="record-wins">${blueParts[0] || 0} W</span>
+          <span class="record-losses">${blueParts[1] || 0} L</span>
+        `;
+      } else {
+        redRecordEl.innerHTML = '';
+        blueRecordEl.innerHTML = '';
+      }
+
+      // Event name visibility
+      if (state.showEventName) {
+        eventNameEl.style.display = '';
+      } else {
+        eventNameEl.style.display = 'none';
+      }
+
+      // Status
+      matchStatusEl.textContent = state.matchStatus;
+      matchStatusEl.className = 'match-status';
+      
+      if (state.matchStatus === 'IN PROGRESS') {
+        matchStatusEl.classList.add('in-progress');
+      } else if (state.matchStatus === 'COMPLETED') {
+        matchStatusEl.classList.add('completed');
+      }
+
+      // Apply theme color
+      applyThemeColor(state.accentColor);
+    }
+
+    function applyThemeColor(color) {
+      document.documentElement.style.setProperty('--gscrl-primary', color);
+      document.documentElement.style.setProperty('--glow-color', color);
+    }
+
+    // ========================================
+    // Settings Functions
+    // ========================================
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem(GSCRLConfig.storageKeys.matchInfoSettings);
+        if (saved) {
+          const settings = JSON.parse(saved);
+          
+          // Merge with defaults
+          state = { ...state, ...settings };
+          
+          // Update form inputs
+          eventNameInput.value = state.eventName || eventNameInput.value;
+          weightClassSelect.value = state.weightClass || weightClassSelect.value;
+          matchRoundInput.value = state.matchRound || matchRoundInput.value;
+          matchStatusSelect.value = state.matchStatus || matchStatusSelect.value;
+          matchTimerInput.value = state.matchTimer || matchTimerInput.value;
+          redPlayerInput.value = state.redPlayer || redPlayerInput.value;
+          redBotInput.value = state.redBot || redBotInput.value;
+          redRecordInput.value = state.redRecord || redRecordInput.value;
+          bluePlayerInput.value = state.bluePlayer || bluePlayerInput.value;
+          blueBotInput.value = state.blueBot || blueBotInput.value;
+          blueRecordInput.value = state.blueRecord || blueRecordInput.value;
+          showRecordsCheckbox.checked = state.showRecords !== false;
+          showEventNameCheckbox.checked = state.showEventName !== false;
+          accentColorInput.value = state.accentColor || accentColorInput.value;
+        }
+      } catch (e) {
+        console.warn('Failed to load match info settings:', e);
+      }
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(
+          GSCRLConfig.storageKeys.matchInfoSettings,
+          JSON.stringify(state)
+        );
+      } catch (e) {
+        console.warn('Failed to save match info settings:', e);
+      }
+    }
+
+    // ========================================
+    // Event Listeners
+    // ========================================
+    settingsToggle.addEventListener('click', () => {
+      settingsPanel.classList.toggle('open');
+    });
+
+    applySettingsBtn.addEventListener('click', () => {
+      // Update state from form inputs
+      state.eventName = eventNameInput.value.toUpperCase();
+      state.weightClass = weightClassSelect.value;
+      state.matchRound = matchRoundInput.value;
+      state.matchStatus = matchStatusSelect.value;
+      state.matchTimer = matchTimerInput.value;
+      state.redPlayer = redPlayerInput.value;
+      state.redBot = redBotInput.value;
+      state.redRecord = redRecordInput.value;
+      state.bluePlayer = bluePlayerInput.value;
+      state.blueBot = blueBotInput.value;
+      state.blueRecord = blueRecordInput.value;
+      state.showRecords = showRecordsCheckbox.checked;
+      state.showEventName = showEventNameCheckbox.checked;
+      state.accentColor = accentColorInput.value;
+
+      // Update display and save
+      updateDisplay();
+      saveSettings();
+
+      // Close panel
+      settingsPanel.classList.remove('open');
+    });
+
+    // ========================================
+    // Initialize
+    // ========================================
+    function init() {
+      loadSettings();
+      parseUrlParams(); // URL params override localStorage
+      updateDisplay();
+    }
+
+    init();
+  </script>
+</body>
+</html>
