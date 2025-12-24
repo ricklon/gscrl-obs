@@ -22,6 +22,7 @@ A collection of self-contained HTML overlays designed for use as OBS browser sou
 | [Waiting Screen](overlays/waiting-screen.html) | Ready | Pre-stream screen with countdown, event info, and loading animation |
 | [Break Timer](overlays/break-timer.html) | Ready | Countdown timer with circular progress ring |
 | [Match Info](overlays/match-info.html) | Ready | Current match display (players, bots, weight class, status) |
+| [Event Info](overlays/event-info.html) | Ready | Versatile overlay for schedule, standings, sponsors, and engagement prompts |
 | Countdown | Planned | Pre-match countdown (3-2-1-FIGHT style) |
 | Lower Third | Planned | Customizable lower third graphic |
 | Bracket | Planned | Tournament bracket display |
@@ -248,6 +249,151 @@ See [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) for detailed theming options.
 - [x] **Phase 2: Core Overlays** — Match info ✓, countdown, lower third
 - [ ] **Phase 3: Integration** — True Finals API, WebSocket control
 - [ ] **Phase 4: Polish** — Sponsors, sound effects, animations
+
+## Event Info Overlay
+
+The Event Info overlay is a versatile, multi-purpose overlay designed to provide general updates, schedule information, sponsor messages, and engagement prompts throughout the streaming event.
+
+### Features
+
+- **Multiple Content Types**: Schedule, Standings, Sponsors, Engagement
+- **URL Parameter Control**: Full configuration via URL parameters
+- **Settings Panel**: Comprehensive customization with localStorage persistence
+- **Smooth Animations**: Professional transitions between content
+- **Responsive Design**: Works on all screen sizes
+- **Real-time Updates**: Clock and timer functionality
+
+### Content Types
+
+#### 1. Schedule Display
+Shows upcoming matches with times, weight classes, and round information.
+
+#### 2. Standings/Bracket
+Displays current standings table with competitor names, records, and points.
+
+#### 3. Sponsor Showcase
+Rotating sponsor messages with logos, CTAs, and social media links.
+
+#### 4. Engagement Prompts
+Interactive polls and questions for viewer participation.
+
+### URL Parameters
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `type` | Content type | `?type=standings` |
+| `event` | Event name | `?event=National%20Invitational` |
+| `status` | Event status | `?status=INTERMISSION` |
+| `nextmatch` | Next match info | `?nextmatch=Bot%20A%20vs%20Bot%20B` |
+| `nexttime` | Estimated time | `?nexttime=15:00` |
+| `weightclass` | Weight class | `?weightclass=12lb` |
+| `schedule` | Schedule data (JSON) | `?schedule=[...]` |
+| `standings` | Standings data (JSON) | `?standings=[...]` |
+| `sponsor` | Sponsor data (JSON) | `?sponsor=[...]` |
+| `sponsormessage` | Simple sponsor message | `?sponsormessage=Thanks%20to%20our%20sponsors` |
+| `engagement` | Engagement data (JSON) | `?engagement=[...]` |
+| `prompt` | Simple engagement prompt | `?prompt=Who%20will%20win?` |
+| `showheader` | Show header | `?showheader=false` |
+| `showfooter` | Show footer | `?showfooter=false` |
+| `showtimer` | Show countdown timer | `?showtimer=true` |
+| `timer` | Timer duration (seconds) | `?timer=600` |
+| `color` | Accent color (hex) | `?color=4ECDC4` |
+
+### Example URLs
+
+**Basic Schedule:**
+```
+overlays/event-info.html
+```
+
+**Standings View:**
+```
+overlays/event-info.html?type=standings&event=Summer%20Showdown
+```
+
+**Custom Schedule Data:**
+```
+overlays/event-info.html?schedule=[{"match":"Team%20A%20vs%20Team%20B","time":"15:00","weight":"12lb","round":"Final"}]
+```
+
+**Sponsor Message:**
+```
+overlays/event-info.html?type=sponsor&sponsormessage=Presented%20by%20Our%20Amazing%20Sponsors!
+```
+
+**Engagement Prompt:**
+```
+overlays/event-info.html?type=engagement&prompt=WHO%20WILL%20WIN%20THE%20NEXT%20MATCH?
+```
+
+**Complex Configuration:**
+```
+overlays/event-info.html?event=National%20Championship&type=schedule&schedule=[{"match":"Match%201","time":"14:00","weight":"3lb","round":"Quarterfinal"},{"match":"Match%202","time":"14:30","weight":"12lb","round":"Quarterfinal"}]&standings=[{"name":"Competitor%201","wins":2,"losses":0,"points":6},{"name":"Competitor%202","wins":1,"losses":1,"points":3}]&color=4ECDC4
+```
+
+### Settings Panel
+
+Press **Ctrl+S** to open the settings panel for comprehensive configuration:
+
+- **General Settings**: Event title, status
+- **Content Settings**: Active content type selection
+- **Schedule Settings**: JSON editor for schedule data
+- **Display Options**: Show/hide header, footer
+- **Styling**: Custom accent colors
+- **Data Management**: Import/export configuration
+
+### JSON Data Formats
+
+**Schedule Data:**
+```json
+[
+  {
+    "match": "John Doe vs Jane Smith",
+    "time": "14:30",
+    "weight": "3lb",
+    "round": "Quarterfinal"
+  }
+]
+```
+
+**Standings Data:**
+```json
+[
+  {
+    "name": "John Doe",
+    "wins": 3,
+    "losses": 1,
+    "points": 9
+  }
+]
+```
+
+**Sponsor Data:**
+```json
+[
+  {
+    "name": "Acme Robotics",
+    "message": "Proud sponsor of the event!",
+    "logo": "logo.png",
+    "url": "https://acme.com",
+    "social": "@AcmeRobotics",
+    "cta": "Visit our website!"
+  }
+]
+```
+
+**Engagement Data:**
+```json
+[
+  {
+    "prompt": "WHO WILL WIN THE NEXT MATCH?",
+    "options": ["Team A", "Team B"],
+    "hashtag": "#GSCRLVote",
+    "social": "@GSCRL on Twitter",
+    "timer": 60
+  }
+]
+```
 
 ## Contributing
 
