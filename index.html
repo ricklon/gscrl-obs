@@ -346,6 +346,23 @@
           </div>
         </div>
 
+        <!-- Event Info -->
+        <div class="overlay-card">
+          <div class="overlay-preview">EVENT</div>
+          <div class="overlay-content">
+            <h3 class="overlay-title">
+              Event Info
+              <span class="status-badge ready">Ready</span>
+            </h3>
+            <p class="overlay-desc">Versatile overlay for schedule, standings, sponsors, and engagement prompts with URL control.</p>
+            <p class="overlay-meta">Recommended: 1920 x 1080</p>
+            <div class="overlay-actions">
+              <a href="overlays/event-info.html" class="btn btn-primary">Open</a>
+              <a href="docs/OBS-SETUP.md" class="btn btn-secondary">Setup</a>
+            </div>
+          </div>
+        </div>
+
         <!-- Countdown -->
         <div class="overlay-card">
           <div class="overlay-preview">3-2-1</div>
@@ -470,10 +487,27 @@
               <td>Hide control buttons</td>
               <td><code>?hidecontrols=true</code></td>
             </tr>
+            <tr>
+              <td><code>type</code></td>
+              <td>Content type (Event Info)</td>
+              <td><code>?type=standings</code></td>
+            </tr>
+            <tr>
+              <td><code>event</code></td>
+              <td>Event name</td>
+              <td><code>?event=Summer%20Showdown</code></td>
+            </tr>
+            <tr>
+              <td><code>schedule</code></td>
+              <td>Schedule data (JSON)</td>
+              <td><code>?schedule=[...]</code></td>
+            </tr>
           </tbody>
         </table>
         <p style="margin-top: 16px;">Example full URL:</p>
         <div class="code-block">https://gscrl-obs.pages.dev/overlays/break-timer.html?duration=10&amp;label=BRB&amp;color=FF6B6B&amp;hidecontrols=true</div>
+        <p style="margin-top: 16px;">Event Info example:</p>
+        <div class="code-block">https://gscrl-obs.pages.dev/overlays/event-info.html?type=standings&amp;event=National%20Championship</div>
       </div>
     </section>
 
