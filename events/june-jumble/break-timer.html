@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Break Timer - GSCRL June Jumble 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #ffffff;
+      --gray: #888899;
+      --font-display: 'Russo One', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: transparent;
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      background: rgba(26, 26, 46, 0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      min-width: 280px;
+    }
+
+    .event-label {
+      font-family: var(--font-display);
+      font-size: 0.625rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Progress ring */
+    .ring-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    .ring-wrapper svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.07);
+      stroke-width: 8;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+      filter: drop-shadow(0 0 6px var(--primary));
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .timer-display {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--light);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .timer-label {
+      font-family: var(--font-display);
+      font-size: 0.625rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-start { background: var(--primary); color: var(--light); }
+    .btn-start:hover { filter: brightness(1.15); box-shadow: 0 0 15px var(--primary); }
+    .btn-reset { background: transparent; color: var(--light); border: 1px solid rgba(255,255,255,0.3); }
+    .btn-reset:hover { background: rgba(255,255,255,0.1); }
+
+    .duration-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .duration-btn {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .duration-btn:hover, .duration-btn.active {
+      background: rgba(255, 107, 107, 0.2);
+      border-color: var(--primary);
+      color: var(--light);
+    }
+
+    .obs-hide { /* add .obs-hide { display: none !important; } in OBS custom CSS */ }
+  </style>
+</head>
+<body>
+  <div class="timer-container">
+    <div class="event-label obs-hide">June Jumble 2026</div>
+
+    <div class="ring-wrapper">
+      <svg viewBox="0 0 100 100">
+        <circle class="ring-track" cx="50" cy="50" r="44"/>
+        <circle class="ring-progress" id="ringProgress" cx="50" cy="50" r="44"
+          stroke-dasharray="276.46"
+          stroke-dashoffset="0"/>
+      </svg>
+      <div class="ring-center">
+        <div class="timer-display" id="timerDisplay">10:00</div>
+        <div class="timer-label" id="timerLabel">BE RIGHT BACK</div>
+      </div>
+    </div>
+
+    <div class="duration-row obs-hide">
+      <button class="duration-btn" data-min="5">5m</button>
+      <button class="duration-btn active" data-min="10">10m</button>
+      <button class="duration-btn" data-min="15">15m</button>
+      <button class="duration-btn" data-min="20">20m</button>
+    </div>
+
+    <div class="controls obs-hide">
+      <button class="btn btn-start" id="startBtn">Start</button>
+      <button class="btn btn-reset" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    const CIRCUMFERENCE = 276.46;
+
+    let totalSeconds = 10 * 60;
+    let remaining = totalSeconds;
+    let running = false;
+    let interval = null;
+
+    const display = document.getElementById('timerDisplay');
+    const label = document.getElementById('timerLabel');
+    const ring = document.getElementById('ringProgress');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    }
+
+    function setProgress(r, total) {
+      const pct = r / total;
+      ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct);
+    }
+
+    function tick() {
+      if (remaining <= 0) {
+        clearInterval(interval);
+        running = false;
+        startBtn.textContent = 'Start';
+        display.textContent = '00:00';
+        label.textContent = "WE'RE BACK!";
+        ring.style.strokeDashoffset = CIRCUMFERENCE;
+        return;
+      }
+      remaining--;
+      display.textContent = fmt(remaining);
+      setProgress(remaining, totalSeconds);
+    }
+
+    function setDuration(minutes) {
+      if (running) return;
+      totalSeconds = minutes * 60;
+      remaining = totalSeconds;
+      display.textContent = fmt(remaining);
+      setProgress(remaining, totalSeconds);
+      label.textContent = 'BE RIGHT BACK';
+    }
+
+    startBtn.addEventListener('click', () => {
+      if (running) {
+        clearInterval(interval);
+        running = false;
+        startBtn.textContent = 'Resume';
+      } else {
+        if (remaining <= 0) { remaining = totalSeconds; }
+        interval = setInterval(tick, 1000);
+        running = true;
+        startBtn.textContent = 'Pause';
+        label.textContent = 'BE RIGHT BACK';
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      clearInterval(interval);
+      running = false;
+      remaining = totalSeconds;
+      display.textContent = fmt(remaining);
+      setProgress(remaining, totalSeconds);
+      label.textContent = 'BE RIGHT BACK';
+      startBtn.textContent = 'Start';
+    });
+
+    document.querySelectorAll('.duration-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setDuration(parseInt(btn.dataset.min));
+      });
+    });
+
+    // URL params
+    (function() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.has('duration')) setDuration(parseInt(p.get('duration')) || 10);
+      if (p.has('label')) label.textContent = decodeURIComponent(p.get('label')).toUpperCase();
+      if (p.has('color')) {
+        const hex = '#' + p.get('color').replace('#','');
+        if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+          document.documentElement.style.setProperty('--primary', hex);
+        }
+      }
+      if (p.get('autostart') === 'true') startBtn.click();
+    })();
+
+    display.textContent = fmt(remaining);
+    setProgress(remaining, totalSeconds);
+  </script>
+</body>
+</html>

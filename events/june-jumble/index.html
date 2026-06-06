@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSCRL June Jumble 2026 — OBS Overlays</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #ffffff;
+      --gray: #888899;
+      --font-display: 'Russo One', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--darker);
+      color: var(--light);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .event-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .event-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--secondary);
+      margin-bottom: 12px;
+    }
+
+    .event-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--light);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .event-title .highlight { color: var(--primary); }
+
+    .event-meta {
+      font-size: 0.875rem;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .event-pills {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .pill {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill-day1 { background: rgba(255,107,107,0.15); border: 1px solid var(--primary); color: var(--primary); }
+    .pill-day2 { background: rgba(78,205,196,0.15); border: 1px solid var(--secondary); color: var(--secondary); }
+    .pill-venue { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--gray); }
+
+    /* Day sections */
+    .day-section { margin-bottom: 48px; }
+
+    .day-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .day-label {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--light);
+    }
+
+    .day-sub {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    .day-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Overlay cards */
+    .overlays-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .overlay-card {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .overlay-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(255,107,107,0.15);
+      transform: translateY(-3px);
+    }
+
+    .card-preview {
+      height: 64px;
+      background: var(--darker);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.08);
+      letter-spacing: 0.1em;
+    }
+
+    .card-body { padding: 16px; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-dims {
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: var(--gray);
+      background: rgba(255,255,255,0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+
+    /* URL block */
+    .url-block {
+      background: var(--darker);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .url-label {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      padding: 4px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .url-text {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--secondary);
+      padding: 8px 10px;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--primary); color: var(--light); }
+    .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 0 12px var(--primary); }
+    .btn-secondary { background: transparent; color: var(--light); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+    .btn-copy { background: rgba(78,205,196,0.15); color: var(--secondary); border: 1px solid rgba(78,205,196,0.3); }
+    .btn-copy:hover { background: rgba(78,205,196,0.25); }
+    .btn-copy.copied { background: rgba(78,205,196,0.3); }
+
+    /* OBS notes */
+    .obs-note {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .obs-note-title {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .obs-note ol { padding-left: 20px; }
+    .obs-note li { font-size: 0.875rem; color: var(--gray); margin-bottom: 6px; }
+    .obs-note code {
+      background: var(--darker);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--secondary);
+    }
+
+    /* Sponsors */
+    .sponsors-section { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      color: var(--primary);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .sponsors-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sponsor-tag {
+      font-size: 0.8rem;
+      color: var(--gray);
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 40px;
+    }
+
+    .footer a { color: var(--secondary); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="event-header">
+      <div class="event-eyebrow">GSCRL OBS Overlays</div>
+      <h1 class="event-title">JUNE <span class="highlight">JUMBLE</span> 2026</h1>
+      <p class="event-meta">Warren County Balloon Festival &bull; Washington, NJ &bull; June 6&ndash;7, 2026</p>
+      <p class="event-meta">Drivers Meeting 10:00 AM &bull; Fights Begin 11:00 AM EDT</p>
+      <div class="event-pills">
+        <span class="pill pill-day1">Day 1 &bull; June 6 &bull; 1lb Ants</span>
+        <span class="pill pill-day2">Day 2 &bull; June 7 &bull; 3lb Beetles</span>
+        <span class="pill pill-venue">29 competitors Day 1 &bull; 24 competitors Day 2</span>
+      </div>
+    </header>
+
+    <!-- OBS Quick Setup -->
+    <div class="obs-note">
+      <div class="obs-note-title">OBS QUICK SETUP</div>
+      <ol>
+        <li>In OBS: <strong>Sources → + → Browser Source</strong></li>
+        <li>Paste the URL below into the URL field and set the recommended dimensions</li>
+        <li>Add Custom CSS: <code>body { background: transparent !important; }</code></li>
+        <li>Add <code>?day=1</code> or <code>?day=2</code> to any URL to switch day content automatically</li>
+      </ol>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="day-section">
+      <div class="day-heading">
+        <div>
+          <div class="day-label">DAY 1 &mdash; JUNE 6, 2026</div>
+          <div class="day-sub">1lb Antweight (22) &bull; 1lb Plastic Antweight (7)</div>
+        </div>
+        <div class="day-line"></div>
+      </div>
+
+      <div class="overlays-grid">
+
+        <!-- Welcome Screen D1 -->
+        <div class="overlay-card">
+          <div class="card-preview">WELCOME</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Welcome Screen</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Opening splash with event branding, venue, weight classes, sponsors, and social handles.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 1</div>
+              <div class="url-text" id="url-welcome-d1">welcome-screen.html?day=1</div>
+            </div>
+            <div class="card-actions">
+              <a href="welcome-screen.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-welcome-d1', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Waiting Screen D1 -->
+        <div class="overlay-card">
+          <div class="card-preview">WAITING</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Waiting Screen</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Pre-stream holding screen with animated spinner, event details, and schedule info.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 1</div>
+              <div class="url-text" id="url-waiting-d1">waiting-screen.html?day=1</div>
+            </div>
+            <div class="card-actions">
+              <a href="waiting-screen.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-waiting-d1', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match Info D1 -->
+        <div class="overlay-card">
+          <div class="card-preview">MATCH</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Match Info</div>
+              <div class="card-dims">1920 &times; 200</div>
+            </div>
+            <p class="card-desc">Lower-third bar showing player names, bot names, records, weight class, and match status.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 1</div>
+              <div class="url-text" id="url-match-d1">match-info.html?day=1</div>
+            </div>
+            <div class="card-actions">
+              <a href="match-info.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-match-d1', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break Timer -->
+        <div class="overlay-card">
+          <div class="card-preview">TIMER</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Break Timer</div>
+              <div class="card-dims">400 &times; 450</div>
+            </div>
+            <p class="card-desc">Countdown ring for stream breaks. Use <code>?duration=10</code> and <code>?autostart=true</code>.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL</div>
+              <div class="url-text" id="url-timer">break-timer.html?duration=10&amp;autostart=false</div>
+            </div>
+            <div class="card-actions">
+              <a href="break-timer.html" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-timer', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Info D1 - Schedule -->
+        <div class="overlay-card">
+          <div class="card-preview">EVENT</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Event Info &mdash; Schedule</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Day 1 schedule display with time slots and fight order.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 1 Schedule</div>
+              <div class="url-text" id="url-info-sched-d1">event-info.html?day=1&amp;view=schedule</div>
+            </div>
+            <div class="card-actions">
+              <a href="event-info.html?day=1&view=schedule" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-info-sched-d1', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Info - Sponsors -->
+        <div class="overlay-card">
+          <div class="card-preview">SPONSORS</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Event Info &mdash; Sponsors</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Sponsor acknowledgment card. Works for both days.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL</div>
+              <div class="url-text" id="url-sponsors">event-info.html?view=sponsors</div>
+            </div>
+            <div class="card-actions">
+              <a href="event-info.html?view=sponsors" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-sponsors', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-section">
+      <div class="day-heading">
+        <div>
+          <div class="day-label">DAY 2 &mdash; JUNE 7, 2026</div>
+          <div class="day-sub">3lb Beetleweight (24)</div>
+        </div>
+        <div class="day-line"></div>
+      </div>
+
+      <div class="overlays-grid">
+
+        <div class="overlay-card">
+          <div class="card-preview">WELCOME</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Welcome Screen</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Day 2 version — Beetleweight branding, 24 competitors.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 2</div>
+              <div class="url-text" id="url-welcome-d2">welcome-screen.html?day=2</div>
+            </div>
+            <div class="card-actions">
+              <a href="welcome-screen.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-welcome-d2', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay-card">
+          <div class="card-preview">WAITING</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Waiting Screen</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Day 2 pre-stream holding screen — Beetleweight details.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 2</div>
+              <div class="url-text" id="url-waiting-d2">waiting-screen.html?day=2</div>
+            </div>
+            <div class="card-actions">
+              <a href="waiting-screen.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-waiting-d2', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay-card">
+          <div class="card-preview">MATCH</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Match Info</div>
+              <div class="card-dims">1920 &times; 200</div>
+            </div>
+            <p class="card-desc">Day 2 match bar — defaults to 3lb Beetleweight class.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 2</div>
+              <div class="url-text" id="url-match-d2">match-info.html?day=2</div>
+            </div>
+            <div class="card-actions">
+              <a href="match-info.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-match-d2', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay-card">
+          <div class="card-preview">EVENT</div>
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-title">Event Info &mdash; Schedule</div>
+              <div class="card-dims">1920 &times; 1080</div>
+            </div>
+            <p class="card-desc">Day 2 schedule display for Beetleweight rounds and finals.</p>
+            <div class="url-block">
+              <div class="url-label">OBS URL &mdash; Day 2 Schedule</div>
+              <div class="url-text" id="url-info-sched-d2">event-info.html?day=2&amp;view=schedule</div>
+            </div>
+            <div class="card-actions">
+              <a href="event-info.html?day=2&view=schedule" target="_blank" class="btn btn-primary">Preview</a>
+              <button class="btn btn-copy" onclick="copyUrl('url-info-sched-d2', this)">Copy URL</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sponsors -->
+    <div class="sponsors-section">
+      <div class="section-heading">SPONSORS</div>
+      <div class="sponsors-row">
+        <span class="sponsor-tag">FUBAR Labs</span>
+        <span class="sponsor-tag">ItGresa Robotics</span>
+        <span class="sponsor-tag">Repeat Robotics</span>
+        <span class="sponsor-tag">Warren UAS</span>
+        <span class="sponsor-tag">Warren County Board of Tourism</span>
+        <span class="sponsor-tag">Just 'Cuz Robotics</span>
+        <span class="sponsor-tag">Turnabot</span>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>
+        GSCRL June Jumble 2026 &bull;
+        <a href="https://gscrl.org/" target="_blank">gscrl.org</a> &bull;
+        <a href="../../index.html">All Overlays</a>
+      </p>
+      <p style="margin-top:6px">YouTube: @gscrl &bull; Instagram: @_gscrl &bull; Discord: discord.gg/qwkeeVWgs2</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function copyUrl(id, btn) {
+      const text = document.getElementById(id).textContent;
+      // Build absolute URL relative to this page
+      const abs = new URL(text, window.location.href).href;
+      navigator.clipboard.writeText(abs).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

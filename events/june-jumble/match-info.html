@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Info - GSCRL June Jumble 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    body {
+      min-height: 200px;
+      height: 200px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .match-info-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      padding: var(--space-4);
+      box-sizing: border-box;
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .event-info { display: flex; flex-direction: column; gap: var(--space-1); }
+
+    .event-name {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      letter-spacing: 0.05em;
+      color: var(--gscrl-light);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    .event-meta {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .match-status {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      background: var(--gscrl-primary);
+      color: var(--gscrl-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    .match-status.in-progress {
+      background: var(--color-warning);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .match-status.completed { background: var(--color-success); }
+
+    .match-teams {
+      display: flex;
+      flex: 1;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .team {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .team.red-team { border-color: #ff6b6b; }
+    .team.blue-team { border-color: #4ECDC4; }
+
+    .team-header {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .team-header::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .team.red-team .team-header::before { background: #ff6b6b; }
+    .team.blue-team .team-header::before { background: #4ECDC4; }
+
+    .player-name {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--gscrl-light);
+      margin-bottom: var(--space-1);
+    }
+
+    .bot-name {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--gscrl-light);
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .team.red-team .bot-name { color: #ff6b6b; text-shadow: 0 0 10px #ff6b6b; }
+    .team.blue-team .bot-name { color: #4ECDC4; text-shadow: 0 0 10px #4ECDC4; }
+
+    .player-record {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-gray);
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .record-wins { color: var(--color-success); }
+    .record-losses { color: var(--color-danger); }
+
+    .team-divider {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .vs-indicator {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      color: var(--gscrl-primary);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+      transform: rotate(-15deg);
+      letter-spacing: 0.1em;
+    }
+
+    .match-timer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-2) var(--space-4);
+      background: rgba(26, 26, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      margin-top: auto;
+    }
+
+    .timer-display {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--gscrl-light);
+      letter-spacing: 0.1em;
+    }
+
+    .match-info-settings { padding: var(--space-4); }
+
+    .settings-section {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .settings-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      color: var(--gscrl-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-3);
+    }
+
+    .team-settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .team-settings > div { display: flex; flex-direction: column; gap: var(--space-3); }
+    .team-red .form-label { color: #ff6b6b; }
+    .team-blue .form-label { color: #4ECDC4; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+  </style>
+</head>
+<body>
+  <div class="match-info-container" id="matchInfoContainer">
+    <div class="match-header">
+      <div class="event-info">
+        <div class="event-name" id="eventName">GSCRL JUNE JUMBLE 2026</div>
+        <div class="event-meta">
+          <span class="weight-class" id="weightClass">1LB CLASS</span>
+          <span class="match-round" id="matchRound">ROUND 1</span>
+        </div>
+      </div>
+      <div class="match-status" id="matchStatus">UPCOMING</div>
+    </div>
+
+    <div class="match-teams">
+      <div class="team red-team">
+        <div class="team-header">RED CORNER</div>
+        <div class="player-name" id="redPlayer">Player 1</div>
+        <div class="bot-name" id="redBot">Bot A</div>
+        <div class="player-record" id="redRecord">
+          <span class="record-wins">0 W</span>
+          <span class="record-losses">0 L</span>
+        </div>
+      </div>
+
+      <div class="team-divider">
+        <div class="vs-indicator">VS</div>
+      </div>
+
+      <div class="team blue-team">
+        <div class="team-header">BLUE CORNER</div>
+        <div class="player-name" id="bluePlayer">Player 2</div>
+        <div class="bot-name" id="blueBot">Bot B</div>
+        <div class="player-record" id="blueRecord">
+          <span class="record-wins">0 W</span>
+          <span class="record-losses">0 L</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="match-timer">
+      <div class="timer-display" id="matchTimer">03:00</div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <button class="settings-toggle" id="settingsToggle">&#9881;</button>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="match-info-settings">
+      <div class="settings-section">
+        <h3 class="section-title">Event Information</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="eventNameInput">Event Name</label>
+          <input type="text" class="form-input" id="eventNameInput" value="GSCRL JUNE JUMBLE 2026" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="weightClassSelect">Weight Class</label>
+          <select class="form-select" id="weightClassSelect">
+            <option value="1lb">1lb Antweight</option>
+            <option value="1lb Plastic">1lb Plastic Antweight</option>
+            <option value="3lb">3lb Beetleweight</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchRoundInput">Round</label>
+          <input type="text" class="form-input" id="matchRoundInput" value="1" maxlength="10">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchStatusSelect">Status</label>
+          <select class="form-select" id="matchStatusSelect">
+            <option value="UPCOMING" selected>Upcoming</option>
+            <option value="IN PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="matchTimerInput">Timer (MM:SS)</label>
+          <input type="text" class="form-input" id="matchTimerInput" value="03:00" maxlength="5">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">Team Information</h3>
+
+        <div class="team-settings">
+          <div class="team-red">
+            <div class="form-group">
+              <label class="form-label">Red Player</label>
+              <input type="text" class="form-input" id="redPlayerInput" value="Player 1" maxlength="30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Red Bot</label>
+              <input type="text" class="form-input" id="redBotInput" value="Bot A" maxlength="30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Record (W-L)</label>
+              <input type="text" class="form-input" id="redRecordInput" value="0-0" maxlength="10">
+            </div>
+          </div>
+
+          <div class="team-blue">
+            <div class="form-group">
+              <label class="form-label">Blue Player</label>
+              <input type="text" class="form-input" id="bluePlayerInput" value="Player 2" maxlength="30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Blue Bot</label>
+              <input type="text" class="form-input" id="blueBotInput" value="Bot B" maxlength="30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Record (W-L)</label>
+              <input type="text" class="form-input" id="blueRecordInput" value="0-0" maxlength="10">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn--primary" id="applySettings" style="width:100%">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/config.js"></script>
+  <script src="../../shared/utils.js"></script>
+  <script>
+    let state = {
+      eventName: 'GSCRL JUNE JUMBLE 2026',
+      weightClass: '1lb',
+      matchRound: '1',
+      matchStatus: 'UPCOMING',
+      matchTimer: '03:00',
+      redPlayer: 'Player 1', redBot: 'Bot A', redRecord: '0-0',
+      bluePlayer: 'Player 2', blueBot: 'Bot B', blueRecord: '0-0',
+    };
+
+    const $ = id => document.getElementById(id);
+
+    function updateDisplay() {
+      $('eventName').textContent = state.eventName;
+      $('weightClass').textContent = state.weightClass.toUpperCase() + ' CLASS';
+      $('matchRound').textContent = 'ROUND ' + state.matchRound;
+      $('matchTimer').textContent = state.matchTimer;
+      $('redPlayer').textContent = state.redPlayer;
+      $('redBot').textContent = state.redBot;
+      $('bluePlayer').textContent = state.bluePlayer;
+      $('blueBot').textContent = state.blueBot;
+
+      const rp = state.redRecord.split('-');
+      const bp = state.blueRecord.split('-');
+      $('redRecord').innerHTML = `<span class="record-wins">${rp[0]||0} W</span><span class="record-losses">${rp[1]||0} L</span>`;
+      $('blueRecord').innerHTML = `<span class="record-wins">${bp[0]||0} W</span><span class="record-losses">${bp[1]||0} L</span>`;
+
+      const statusEl = $('matchStatus');
+      statusEl.textContent = state.matchStatus;
+      statusEl.className = 'match-status';
+      if (state.matchStatus === 'IN PROGRESS') statusEl.classList.add('in-progress');
+      if (state.matchStatus === 'COMPLETED') statusEl.classList.add('completed');
+    }
+
+    function parseUrlParams() {
+      const p = new URLSearchParams(window.location.search);
+      const map = {
+        event: 'eventName', weightclass: 'weightClass',
+        round: 'matchRound', matchstatus: 'matchStatus', timer: 'matchTimer',
+        redplayer: 'redPlayer', redbot: 'redBot', redrecord: 'redRecord',
+        blueplayer: 'bluePlayer', bluebot: 'blueBot', bluerecord: 'blueRecord'
+      };
+      for (const [param, key] of Object.entries(map)) {
+        if (p.has(param)) state[key] = decodeURIComponent(p.get(param));
+      }
+      // day preset
+      const day = parseInt(p.get('day'));
+      if (day === 2) state.weightClass = '3lb';
+    }
+
+    $('settingsToggle').addEventListener('click', () => $('settingsPanel').classList.toggle('open'));
+
+    $('applySettings').addEventListener('click', () => {
+      state.eventName = $('eventNameInput').value.toUpperCase();
+      state.weightClass = $('weightClassSelect').value;
+      state.matchRound = $('matchRoundInput').value;
+      state.matchStatus = $('matchStatusSelect').value;
+      state.matchTimer = $('matchTimerInput').value;
+      state.redPlayer = $('redPlayerInput').value;
+      state.redBot = $('redBotInput').value;
+      state.redRecord = $('redRecordInput').value;
+      state.bluePlayer = $('bluePlayerInput').value;
+      state.blueBot = $('blueBotInput').value;
+      state.blueRecord = $('blueRecordInput').value;
+      updateDisplay();
+      $('settingsPanel').classList.remove('open');
+    });
+
+    parseUrlParams();
+    updateDisplay();
+  </script>
+</body>
+</html>

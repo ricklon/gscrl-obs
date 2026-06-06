@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - GSCRL June Jumble 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--space-4);
+      box-sizing: border-box;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--gscrl-darker) 0%, var(--gscrl-dark) 100%);
+    }
+
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    /* Day badge */
+    .day-badge {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      background: var(--gscrl-primary);
+      color: var(--gscrl-dark);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-6);
+      opacity: 0;
+      animation: fadeInDown 0.8s ease-out 0.2s forwards;
+    }
+
+    .logo-entrance {
+      margin-bottom: var(--space-6);
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .welcome-logo {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 12vw, 8rem);
+      color: var(--gscrl-light);
+      text-shadow: var(--glow-strong) var(--glow-color);
+      letter-spacing: 0.1em;
+      line-height: 1;
+      animation: logoReveal 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .logo-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--text-xl);
+      color: var(--gscrl-gray);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-top: var(--space-2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 0.5s forwards;
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      color: var(--gscrl-light);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin: var(--space-4) 0;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: scaleIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+    }
+
+    .welcome-title .highlight {
+      color: var(--gscrl-primary);
+      text-shadow: var(--glow-intensity) var(--glow-color);
+    }
+
+    /* Info cards row */
+    .info-row {
+      display: flex;
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+      width: 100%;
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out 2s forwards;
+    }
+
+    .info-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-3);
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(5px);
+    }
+
+    .info-card-label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .info-card-value {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      color: var(--gscrl-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    /* Weight classes display */
+    .classes-section {
+      margin: var(--space-4) 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 2.8s forwards;
+    }
+
+    .classes-title {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: var(--space-3);
+    }
+
+    .classes-list {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .class-chip {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-4);
+      background: rgba(255, 107, 107, 0.15);
+      border: 1px solid var(--gscrl-primary);
+      border-radius: var(--radius-full);
+      color: var(--gscrl-light);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Schedule strip */
+    .schedule-strip {
+      display: flex;
+      gap: var(--space-6);
+      margin: var(--space-4) 0;
+      padding: var(--space-3) var(--space-6);
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 3.4s forwards;
+    }
+
+    .schedule-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .schedule-time {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      color: var(--gscrl-secondary);
+    }
+
+    .schedule-label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .schedule-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+      align-self: stretch;
+    }
+
+    /* Final message */
+    .final-message {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--gscrl-light);
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin-top: var(--space-6);
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 4.2s forwards;
+    }
+
+    @keyframes logoReveal {
+      0% { opacity: 0; transform: perspective(500px) rotateX(15deg) scale(0.8); }
+      50% { opacity: 1; transform: perspective(500px) rotateX(-5deg) scale(1.05); }
+      100% { opacity: 1; transform: perspective(500px) rotateX(0deg) scale(1); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .social-row {
+      display: flex;
+      gap: var(--space-6);
+      margin-top: var(--space-4);
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 4.8s forwards;
+    }
+
+    .social-handle {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--gscrl-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .sponsors-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 5.2s forwards;
+    }
+
+    .sponsors-label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--gscrl-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .sponsors-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .sponsors-list .dot {
+      color: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container" id="welcomeContainer">
+    <div class="day-badge" id="dayBadge">Day 1 &bull; June 6, 2026</div>
+
+    <div class="logo-entrance">
+      <div class="welcome-logo">GSCRL</div>
+      <div class="logo-subtitle">Garden State Robot League</div>
+    </div>
+
+    <div class="welcome-title">
+      WELCOME TO <span class="highlight" id="eventNameEl">JUNE JUMBLE</span>
+    </div>
+
+    <div class="info-row">
+      <div class="info-card">
+        <div class="info-card-label">Venue</div>
+        <div class="info-card-value">Warren County Balloon Festival</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Location</div>
+        <div class="info-card-value" id="locationEl">Washington, NJ</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Competitors</div>
+        <div class="info-card-value" id="competitorsEl">29 Competitors</div>
+      </div>
+    </div>
+
+    <div class="classes-section">
+      <div class="classes-title">Today&rsquo;s Weight Classes</div>
+      <div class="classes-list" id="classesList">
+        <div class="class-chip">1lb Antweight</div>
+        <div class="class-chip">1lb Plastic Antweight</div>
+      </div>
+    </div>
+
+    <div class="schedule-strip">
+      <div class="schedule-item">
+        <div class="schedule-time">10:00 AM</div>
+        <div class="schedule-label">Drivers Meeting</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-item">
+        <div class="schedule-time">11:00 AM</div>
+        <div class="schedule-label">Fights Begin</div>
+      </div>
+    </div>
+
+    <div class="final-message" id="finalMessageEl">
+      LET&rsquo;S FIGHT! &#129302;&#9889;&#128293;
+    </div>
+
+    <!-- Social handles -->
+    <div class="social-row">
+      <div class="social-handle">&#128255; @gscrl</div>
+      <div class="social-handle">&#128247; @_gscrl</div>
+      <div class="social-handle">&#128172; discord.gg/qwkeeVWgs2</div>
+    </div>
+
+    <!-- Sponsors -->
+    <div class="sponsors-row">
+      <div class="sponsors-label">Proudly Sponsored By</div>
+      <div class="sponsors-list">
+        <span>FUBAR Labs</span>
+        <span class="dot">&bull;</span>
+        <span>ItGresa Robotics</span>
+        <span class="dot">&bull;</span>
+        <span>Repeat Robotics</span>
+        <span class="dot">&bull;</span>
+        <span>Warren UAS</span>
+        <span class="dot">&bull;</span>
+        <span>Warren County Board of Tourism</span>
+        <span class="dot">&bull;</span>
+        <span>Just &lsquo;Cuz Robotics</span>
+        <span class="dot">&bull;</span>
+        <span>Turnabot</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DAY_CONFIG = {
+      1: {
+        badge: 'Day 1 • June 6, 2026',
+        competitors: '29 Competitors',
+        classes: ['1lb Antweight', '1lb Plastic Antweight'],
+      },
+      2: {
+        badge: 'Day 2 • June 7, 2026',
+        competitors: '24 Competitors',
+        classes: ['3lb Beetleweight'],
+      }
+    };
+
+    function init() {
+      const params = new URLSearchParams(window.location.search);
+      const day = parseInt(params.get('day')) || 1;
+      const config = DAY_CONFIG[day] || DAY_CONFIG[1];
+
+      document.getElementById('dayBadge').textContent = config.badge;
+      document.getElementById('competitorsEl').textContent = config.competitors;
+
+      const list = document.getElementById('classesList');
+      list.innerHTML = config.classes
+        .map(c => `<div class="class-chip">${c}</div>`)
+        .join('');
+
+      if (params.has('color')) {
+        const hex = '#' + params.get('color').replace('#', '');
+        if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+          document.documentElement.style.setProperty('--gscrl-primary', hex);
+          document.documentElement.style.setProperty('--glow-color', hex);
+        }
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
