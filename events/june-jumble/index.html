@@ -307,29 +307,13 @@
 
     .footer a { color: var(--secondary); text-decoration: none; }
 
-    /* Day selector */
-    .day-selector {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .day-btn {
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      padding: 8px 20px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: transparent;
-      color: var(--gray);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .day-btn:hover { border-color: var(--primary); color: var(--light); }
-    .day-btn.active { background: var(--primary); border-color: var(--primary); color: var(--light); }
-    .day-btn[data-day="2"].active { background: var(--secondary); border-color: var(--secondary); color: var(--dark); }
+    /* Day selector pills */
+    .pill { cursor: pointer; transition: all 0.2s; }
+    .pill:hover { filter: brightness(1.2); transform: translateY(-1px); }
+    .pill-day1 { opacity: 0.45; }
+    .pill-day1.active { opacity: 1; box-shadow: 0 0 12px rgba(255,107,107,0.4); }
+    .pill-day2 { opacity: 0.45; }
+    .pill-day2.active { opacity: 1; box-shadow: 0 0 12px rgba(78,205,196,0.4); }
   </style>
 </head>
 <body>
@@ -341,8 +325,8 @@
       <h1 class="event-title">JUNE <span class="highlight">JUMBLE</span> 2026</h1>
       <p class="event-meta">Warren County Balloon Festival &bull; Washington, NJ &bull; June 6&ndash;7, 2026</p>
       <div class="event-pills">
-        <span class="pill pill-day1">Day 1 &bull; June 6 &bull; 1lb Ants &bull; 29 competitors</span>
-        <span class="pill pill-day2">Day 2 &bull; June 7 &bull; 3lb Beetles &bull; 19 competitors</span>
+        <button class="pill pill-day1" data-day="1">Day 1 &bull; June 6 &bull; 1lb Ants &bull; 29 competitors</button>
+        <button class="pill pill-day2" data-day="2">Day 2 &bull; June 7 &bull; 3lb Beetles &bull; 19 competitors</button>
       </div>
     </header>
 
@@ -354,12 +338,6 @@
         <li>Paste the URL below into the URL field and set the recommended dimensions</li>
         <li>Add Custom CSS: <code>body { background: transparent !important; }</code></li>
       </ol>
-    </div>
-
-    <!-- Day selector -->
-    <div class="day-selector">
-      <button class="day-btn" data-day="1">Day 1 &mdash; June 6</button>
-      <button class="day-btn" data-day="2">Day 2 &mdash; June 7</button>
     </div>
 
     <!-- Current day info -->
@@ -609,7 +587,7 @@
 
       document.getElementById('card-truefinals').style.display = cfg.showBrackets ? '' : 'none';
 
-      document.querySelectorAll('.day-btn').forEach(btn => {
+      document.querySelectorAll('[data-day]').forEach(btn => {
         btn.classList.toggle('active', parseInt(btn.dataset.day) === day);
       });
     }
@@ -625,7 +603,7 @@
       });
     }
 
-    document.querySelectorAll('.day-btn').forEach(btn => {
+    document.querySelectorAll('[data-day]').forEach(btn => {
       btn.addEventListener('click', () => setDay(parseInt(btn.dataset.day)));
     });
 
