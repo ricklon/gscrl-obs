@@ -306,6 +306,30 @@
     }
 
     .footer a { color: var(--secondary); text-decoration: none; }
+
+    /* Day selector */
+    .day-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .day-btn {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .day-btn:hover { border-color: var(--primary); color: var(--light); }
+    .day-btn.active { background: var(--primary); border-color: var(--primary); color: var(--light); }
+    .day-btn[data-day="2"].active { background: var(--secondary); border-color: var(--secondary); color: var(--dark); }
   </style>
 </head>
 <body>
@@ -316,11 +340,9 @@
       <div class="event-eyebrow">GSCRL OBS Overlays</div>
       <h1 class="event-title">JUNE <span class="highlight">JUMBLE</span> 2026</h1>
       <p class="event-meta">Warren County Balloon Festival &bull; Washington, NJ &bull; June 6&ndash;7, 2026</p>
-      <p class="event-meta">Day 1: 10:00 AM Drivers Meeting &bull; 11:00 AM Fights Begin &bull; Day 2: 12:00 PM &ndash; 6:00 PM EDT</p>
       <div class="event-pills">
-        <span class="pill pill-day1">Day 1 &bull; June 6 &bull; 1lb Ants</span>
-        <span class="pill pill-day2">Day 2 &bull; June 7 &bull; 3lb Beetles</span>
-        <span class="pill pill-venue">29 competitors Day 1 &bull; 19 competitors Day 2</span>
+        <span class="pill pill-day1">Day 1 &bull; June 6 &bull; 1lb Ants &bull; 29 competitors</span>
+        <span class="pill pill-day2">Day 2 &bull; June 7 &bull; 3lb Beetles &bull; 19 competitors</span>
       </div>
     </header>
 
@@ -331,254 +353,167 @@
         <li>In OBS: <strong>Sources → + → Browser Source</strong></li>
         <li>Paste the URL below into the URL field and set the recommended dimensions</li>
         <li>Add Custom CSS: <code>body { background: transparent !important; }</code></li>
-        <li>Add <code>?day=1</code> or <code>?day=2</code> to any URL to switch day content automatically</li>
       </ol>
     </div>
 
-    <!-- Day 1 -->
-    <div class="day-section">
-      <div class="day-heading">
-        <div>
-          <div class="day-label">DAY 1 &mdash; JUNE 6, 2026</div>
-          <div class="day-sub">1lb Antweight (22) &bull; 1lb Plastic Antweight (7)</div>
-        </div>
-        <div class="day-line"></div>
-      </div>
-
-      <div class="overlays-grid">
-
-        <!-- Welcome Screen D1 -->
-        <div class="overlay-card">
-          <div class="card-preview">WELCOME</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Welcome Screen</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Opening splash with event branding, venue, weight classes, sponsors, and social handles.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 1</div>
-              <div class="url-text" id="url-welcome-d1">welcome-screen.html?day=1</div>
-            </div>
-            <div class="card-actions">
-              <a href="welcome-screen.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-welcome-d1', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Waiting Screen D1 -->
-        <div class="overlay-card">
-          <div class="card-preview">WAITING</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Waiting Screen</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Pre-stream holding screen with animated spinner, event details, and schedule info.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 1</div>
-              <div class="url-text" id="url-waiting-d1">waiting-screen.html?day=1</div>
-            </div>
-            <div class="card-actions">
-              <a href="waiting-screen.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-waiting-d1', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Match Info D1 -->
-        <div class="overlay-card">
-          <div class="card-preview">MATCH</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Match Info</div>
-              <div class="card-dims">1920 &times; 200</div>
-            </div>
-            <p class="card-desc">Lower-third bar showing player names, bot names, records, weight class, and match status.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 1</div>
-              <div class="url-text" id="url-match-d1">match-info.html?day=1</div>
-            </div>
-            <div class="card-actions">
-              <a href="match-info.html?day=1" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-match-d1', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Break Timer -->
-        <div class="overlay-card">
-          <div class="card-preview">TIMER</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Break Timer</div>
-              <div class="card-dims">400 &times; 450</div>
-            </div>
-            <p class="card-desc">Countdown ring for stream breaks. Use <code>?duration=10</code> and <code>?autostart=true</code>.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL</div>
-              <div class="url-text" id="url-timer">break-timer.html?duration=10&amp;autostart=false</div>
-            </div>
-            <div class="card-actions">
-              <a href="break-timer.html" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-timer', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Info D1 - Schedule -->
-        <div class="overlay-card">
-          <div class="card-preview">EVENT</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Event Info &mdash; Schedule</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Day 1 schedule display with time slots and fight order.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 1 Schedule</div>
-              <div class="url-text" id="url-info-sched-d1">event-info.html?day=1&amp;view=schedule</div>
-            </div>
-            <div class="card-actions">
-              <a href="event-info.html?day=1&view=schedule" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-info-sched-d1', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Info - Sponsors -->
-        <div class="overlay-card">
-          <div class="card-preview">SPONSORS</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Event Info &mdash; Sponsors</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Sponsor acknowledgment card. Works for both days.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL</div>
-              <div class="url-text" id="url-sponsors">event-info.html?view=sponsors</div>
-            </div>
-            <div class="card-actions">
-              <a href="event-info.html?view=sponsors" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-sponsors', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <!-- Day selector -->
+    <div class="day-selector">
+      <button class="day-btn" data-day="1">Day 1 &mdash; June 6</button>
+      <button class="day-btn" data-day="2">Day 2 &mdash; June 7</button>
     </div>
 
-    <!-- Day 2 -->
-    <div class="day-section">
-      <div class="day-heading">
-        <div>
-          <div class="day-label">DAY 2 &mdash; JUNE 7, 2026</div>
-          <div class="day-sub">3lb Beetleweight (19) &bull; 12:00 PM &ndash; 6:00 PM EDT &bull; <a href="https://truefinals.com/tournament/a6b4515ddb5a44ce" target="_blank" style="color:var(--secondary);text-decoration:none">TrueFinals Brackets &#8599;</a></div>
+    <!-- Current day info -->
+    <div class="day-heading" style="margin-bottom:24px">
+      <div>
+        <div class="day-label" id="dayLabel"></div>
+        <div class="day-sub" id="daySub"></div>
+      </div>
+      <div class="day-line"></div>
+    </div>
+
+    <!-- Overlay cards -->
+    <div class="overlays-grid">
+
+      <!-- Welcome Screen -->
+      <div class="overlay-card">
+        <div class="card-preview">WELCOME</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Welcome Screen</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc" id="desc-welcome">Opening splash with event branding, venue, weight classes, sponsors, and social handles.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-welcome">OBS URL</div>
+            <div class="url-text" id="url-welcome"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-welcome" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-welcome', this)">Copy URL</button>
+          </div>
         </div>
-        <div class="day-line"></div>
       </div>
 
-      <div class="overlays-grid">
-
-        <div class="overlay-card">
-          <div class="card-preview">WELCOME</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Welcome Screen</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Day 2 version — Beetleweight branding, 24 competitors.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 2</div>
-              <div class="url-text" id="url-welcome-d2">welcome-screen.html?day=2</div>
-            </div>
-            <div class="card-actions">
-              <a href="welcome-screen.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-welcome-d2', this)">Copy URL</button>
-            </div>
+      <!-- Waiting Screen -->
+      <div class="overlay-card">
+        <div class="card-preview">WAITING</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Waiting Screen</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc">Pre-stream holding screen with animated spinner, event details, and schedule info.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-waiting">OBS URL</div>
+            <div class="url-text" id="url-waiting"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-waiting" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-waiting', this)">Copy URL</button>
           </div>
         </div>
-
-        <div class="overlay-card">
-          <div class="card-preview">WAITING</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Waiting Screen</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Day 2 pre-stream holding screen — Beetleweight details.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 2</div>
-              <div class="url-text" id="url-waiting-d2">waiting-screen.html?day=2</div>
-            </div>
-            <div class="card-actions">
-              <a href="waiting-screen.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-waiting-d2', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="overlay-card">
-          <div class="card-preview">MATCH</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Match Info</div>
-              <div class="card-dims">1920 &times; 200</div>
-            </div>
-            <p class="card-desc">Day 2 match bar — defaults to 3lb Beetleweight class.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 2</div>
-              <div class="url-text" id="url-match-d2">match-info.html?day=2</div>
-            </div>
-            <div class="card-actions">
-              <a href="match-info.html?day=2" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-match-d2', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="overlay-card">
-          <div class="card-preview">EVENT</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">Event Info &mdash; Schedule</div>
-              <div class="card-dims">1920 &times; 1080</div>
-            </div>
-            <p class="card-desc">Day 2 schedule display for Beetleweight rounds and finals.</p>
-            <div class="url-block">
-              <div class="url-label">OBS URL &mdash; Day 2 Schedule</div>
-              <div class="url-text" id="url-info-sched-d2">event-info.html?day=2&amp;view=schedule</div>
-            </div>
-            <div class="card-actions">
-              <a href="event-info.html?day=2&view=schedule" target="_blank" class="btn btn-primary">Preview</a>
-              <button class="btn btn-copy" onclick="copyUrl('url-info-sched-d2', this)">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TrueFinals Brackets -->
-        <div class="overlay-card" style="border-color:rgba(78,205,196,0.3)">
-          <div class="card-preview" style="color:var(--secondary);font-size:1rem">BRACKETS</div>
-          <div class="card-body">
-            <div class="card-header">
-              <div class="card-title">TrueFinals Brackets</div>
-              <div class="card-dims" style="color:var(--secondary)">LIVE</div>
-            </div>
-            <p class="card-desc">Live bracket for Day 2 — 3lb Beetleweight (19 bots). Published on TrueFinals.</p>
-            <div class="url-block">
-              <div class="url-label">Bracket URL</div>
-              <div class="url-text" id="url-truefinals" style="word-break:break-all">https://truefinals.com/tournament/a6b4515ddb5a44ce</div>
-            </div>
-            <div class="card-actions">
-              <a href="https://truefinals.com/tournament/a6b4515ddb5a44ce" target="_blank" class="btn btn-primary">Open Brackets</a>
-              <button class="btn btn-copy" onclick="navigator.clipboard.writeText('https://truefinals.com/tournament/a6b4515ddb5a44ce').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy URL',2000)})">Copy URL</button>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Match Info -->
+      <div class="overlay-card">
+        <div class="card-preview">MATCH</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Match Info</div>
+            <div class="card-dims">1920 &times; 200</div>
+          </div>
+          <p class="card-desc" id="desc-match">Lower-third bar showing player names, bot names, records, weight class, and match status.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-match">OBS URL</div>
+            <div class="url-text" id="url-match"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-match" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-match', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Break Timer (no day) -->
+      <div class="overlay-card">
+        <div class="card-preview">TIMER</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Break Timer</div>
+            <div class="card-dims">400 &times; 450</div>
+          </div>
+          <p class="card-desc">Countdown ring for stream breaks. Use <code>?duration=10</code> and <code>?autostart=true</code>.</p>
+          <div class="url-block">
+            <div class="url-label">OBS URL</div>
+            <div class="url-text" id="url-timer">break-timer.html?duration=10&amp;autostart=false</div>
+          </div>
+          <div class="card-actions">
+            <a href="break-timer.html" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-timer', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Info — Schedule -->
+      <div class="overlay-card">
+        <div class="card-preview">EVENT</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Event Info &mdash; Schedule</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc" id="desc-schedule">Schedule display with time slots and fight order.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-schedule">OBS URL</div>
+            <div class="url-text" id="url-schedule"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-schedule" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-schedule', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Info — Sponsors (no day) -->
+      <div class="overlay-card">
+        <div class="card-preview">SPONSORS</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Event Info &mdash; Sponsors</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc">Sponsor acknowledgment card. Works for both days.</p>
+          <div class="url-block">
+            <div class="url-label">OBS URL</div>
+            <div class="url-text" id="url-sponsors">event-info.html?view=sponsors</div>
+          </div>
+          <div class="card-actions">
+            <a href="event-info.html?view=sponsors" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-sponsors', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TrueFinals Brackets (Day 2 only) -->
+      <div class="overlay-card" id="card-truefinals" style="border-color:rgba(78,205,196,0.3);display:none">
+        <div class="card-preview" style="color:var(--secondary);font-size:1rem">BRACKETS</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">TrueFinals Brackets</div>
+            <div class="card-dims" style="color:var(--secondary)">LIVE</div>
+          </div>
+          <p class="card-desc">Live bracket — 3lb Beetleweight (19 bots). Published on TrueFinals.</p>
+          <div class="url-block">
+            <div class="url-label">Bracket URL</div>
+            <div class="url-text" id="url-truefinals">https://truefinals.com/tournament/a6b4515ddb5a44ce</div>
+          </div>
+          <div class="card-actions">
+            <a href="https://truefinals.com/tournament/a6b4515ddb5a44ce" target="_blank" class="btn btn-primary">Open Brackets</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-truefinals', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- OBS Scene Collection Download -->
@@ -623,20 +558,79 @@
   </div>
 
   <script>
-    function copyUrl(id, btn) {
+    const DAY_CONFIG = {
+      1: {
+        label: 'DAY 1 — JUNE 6, 2026',
+        sub: '1lb Antweight (22) • 1lb Plastic Antweight (7) • 10:00 AM Drivers Meeting • 11:00 AM Fights Begin',
+        urls: {
+          welcome:  'welcome-screen.html?day=1',
+          waiting:  'waiting-screen.html?day=1',
+          match:    'match-info.html?day=1',
+          schedule: 'event-info.html?day=1&view=schedule',
+        },
+        labels: {
+          welcome:  'OBS URL — Day 1',
+          waiting:  'OBS URL — Day 1',
+          match:    'OBS URL — Day 1',
+          schedule: 'OBS URL — Day 1 Schedule',
+        },
+        showBrackets: false,
+      },
+      2: {
+        label: 'DAY 2 — JUNE 7, 2026',
+        sub: '3lb Beetleweight (19) • 12:00 PM – 6:00 PM EDT',
+        urls: {
+          welcome:  'welcome-screen.html?day=2',
+          waiting:  'waiting-screen.html?day=2',
+          match:    'match-info.html?day=2',
+          schedule: 'event-info.html?day=2&view=schedule',
+        },
+        labels: {
+          welcome:  'OBS URL — Day 2',
+          waiting:  'OBS URL — Day 2',
+          match:    'OBS URL — Day 2',
+          schedule: 'OBS URL — Day 2 Schedule',
+        },
+        showBrackets: true,
+      },
+    };
+
+    function setDay(day) {
+      const cfg = DAY_CONFIG[day];
+
+      document.getElementById('dayLabel').textContent = cfg.label;
+      document.getElementById('daySub').textContent = cfg.sub;
+
+      for (const [key, url] of Object.entries(cfg.urls)) {
+        document.getElementById('url-' + key).textContent = url;
+        document.getElementById('label-' + key).textContent = cfg.labels[key];
+        document.getElementById('preview-' + key).href = url;
+      }
+
+      document.getElementById('card-truefinals').style.display = cfg.showBrackets ? '' : 'none';
+
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.day) === day);
+      });
+    }
+
+    function copyUrlText(id, btn) {
       const text = document.getElementById(id).textContent;
-      // Build absolute URL relative to this page
       const abs = new URL(text, window.location.href).href;
       navigator.clipboard.writeText(abs).then(() => {
         const orig = btn.textContent;
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = orig;
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
       });
     }
+
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => setDay(parseInt(btn.dataset.day)));
+    });
+
+    // Default to Day 2 (today)
+    setDay(2);
   </script>
 </body>
 </html>
