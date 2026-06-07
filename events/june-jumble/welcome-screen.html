@@ -327,16 +327,8 @@
       </div>
     </div>
 
-    <div class="schedule-strip">
-      <div class="schedule-item">
-        <div class="schedule-time">10:00 AM</div>
-        <div class="schedule-label">Drivers Meeting</div>
-      </div>
-      <div class="schedule-divider"></div>
-      <div class="schedule-item">
-        <div class="schedule-time">11:00 AM</div>
-        <div class="schedule-label">Fights Begin</div>
-      </div>
+    <div class="schedule-strip" id="scheduleStrip">
+      <!-- populated by JS -->
     </div>
 
     <div class="final-message" id="finalMessageEl">
@@ -377,11 +369,19 @@
         badge: 'Day 1 • June 6, 2026',
         competitors: '29 Competitors',
         classes: ['1lb Antweight', '1lb Plastic Antweight'],
+        schedule: [
+          { time: '10:00 AM', label: 'Drivers Meeting' },
+          { time: '11:00 AM', label: 'Fights Begin' },
+        ],
       },
       2: {
         badge: 'Day 2 • June 7, 2026',
-        competitors: '24 Competitors',
+        competitors: '19 Competitors',
         classes: ['3lb Beetleweight'],
+        schedule: [
+          { time: '12:00 PM', label: 'Fights Begin' },
+          { time: '6:00 PM', label: 'Event Ends' },
+        ],
       }
     };
 
@@ -397,6 +397,15 @@
       list.innerHTML = config.classes
         .map(c => `<div class="class-chip">${c}</div>`)
         .join('');
+
+      const strip = document.getElementById('scheduleStrip');
+      strip.innerHTML = config.schedule.map((item, i) => `
+        ${i > 0 ? '<div class="schedule-divider"></div>' : ''}
+        <div class="schedule-item">
+          <div class="schedule-time">${item.time}</div>
+          <div class="schedule-label">${item.label}</div>
+        </div>
+      `).join('');
 
       if (params.has('color')) {
         const hex = '#' + params.get('color').replace('#', '');

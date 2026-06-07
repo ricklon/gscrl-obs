@@ -275,11 +275,12 @@
       </div>
     </div>
 
-    <div class="social-footer">
+    <div class="social-footer" id="socialFooter">
       <div class="social-item">&#128255; @gscrl</div>
       <div class="social-item">&#128247; @_gscrl</div>
       <div class="social-item">&#128172; discord.gg/qwkeeVWgs2</div>
       <div class="social-item">gscrl.org</div>
+      <div class="social-item" id="bracketsLink" style="display:none">&#127942; truefinals.com/tournament/a6b4515ddb5a44ce</div>
     </div>
   </div>
 
@@ -312,14 +313,14 @@
         badge: 'Day 2 • June 7',
         scheduleLabel: 'Day 2 Schedule — 3lb Beetleweight',
         schedule: [
-          { time: '10:00 AM', name: 'Drivers Meeting', sub: 'All competitors required', badge: null },
-          { time: '11:00 AM', name: 'Fights Begin', sub: '3lb Beetleweight pool rounds', badge: 'LIVE', active: true },
+          { time: '12:00 PM', name: 'Fights Begin', sub: '3lb Beetleweight pool rounds', badge: 'LIVE', active: true },
           { time: 'TBD', name: 'Elimination Rounds', sub: 'Top competitors advance', badge: null },
           { time: 'TBD', name: 'Finals', sub: '3lb Beetleweight championship', badge: null },
+          { time: '6:00 PM', name: 'Event Ends', sub: 'Thanks for watching!', badge: null },
         ],
         stats: [
-          { value: '24', label: '3lb Beetleweight' },
-          { value: '7:00', label: 'Event Ends (EDT)' },
+          { value: '19', label: '3lb Beetleweight' },
+          { value: '6:00 PM', label: 'Event Ends (EDT)' },
           { value: '2', label: 'Day Event' },
         ]
       }
@@ -377,6 +378,10 @@
       const view = p.get('view') || 'overview';
       setDay(day);
       setView(view);
+
+      if (day === 2) {
+        document.getElementById('bracketsLink').style.display = '';
+      }
 
       if (p.has('color')) {
         const hex = '#' + p.get('color').replace('#', '');
