@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Match Info - GSCRL June Jumble 2026</title>
+  <title>Match Info - 2026 GSCRL NJ State Champs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
@@ -220,7 +220,7 @@
   <div class="match-info-container" id="matchInfoContainer">
     <div class="match-header">
       <div class="event-info">
-        <div class="event-name" id="eventName">GSCRL JUNE JUMBLE 2026</div>
+        <div class="event-name" id="eventName">2026 GSCRL NJ STATE CHAMPS</div>
         <div class="event-meta">
           <span class="weight-class" id="weightClass">1LB CLASS</span>
           <span class="match-round" id="matchRound">ROUND 1</span>
@@ -270,12 +270,13 @@
 
         <div class="form-group">
           <label class="form-label" for="eventNameInput">Event Name</label>
-          <input type="text" class="form-input" id="eventNameInput" value="GSCRL JUNE JUMBLE 2026" maxlength="50">
+          <input type="text" class="form-input" id="eventNameInput" value="2026 GSCRL NJ STATE CHAMPS" maxlength="50">
         </div>
 
         <div class="form-group">
           <label class="form-label" for="weightClassSelect">Weight Class</label>
           <select class="form-select" id="weightClassSelect">
+            <option value="150g">150g Fairyweight</option>
             <option value="1lb">1lb Antweight</option>
             <option value="1lb Plastic">1lb Plastic Antweight</option>
             <option value="3lb">3lb Beetleweight</option>
@@ -348,7 +349,7 @@
   <script src="../../shared/utils.js"></script>
   <script>
     let state = {
-      eventName: 'GSCRL JUNE JUMBLE 2026',
+      eventName: '2026 GSCRL NJ STATE CHAMPS',
       weightClass: '1lb',
       matchRound: '1',
       matchStatus: 'UPCOMING',
@@ -392,9 +393,6 @@
       for (const [param, key] of Object.entries(map)) {
         if (p.has(param)) state[key] = decodeURIComponent(p.get(param));
       }
-      // day preset
-      const day = parseInt(p.get('day'));
-      if (day === 2) state.weightClass = '3lb';
     }
 
     $('settingsToggle').addEventListener('click', () => $('settingsPanel').classList.toggle('open'));

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GSCRL June Jumble 2026 — OBS Overlays</title>
+  <title>2026 GSCRL NJ State Champs — OBS Overlays</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
@@ -322,11 +322,10 @@
     <!-- Header -->
     <header class="event-header">
       <div class="event-eyebrow">GSCRL OBS Overlays</div>
-      <h1 class="event-title">JUNE <span class="highlight">JUMBLE</span> 2026</h1>
-      <p class="event-meta">Warren County Balloon Festival &bull; Washington, NJ &bull; June 6&ndash;7, 2026</p>
+      <h1 class="event-title">NJ <span class="highlight">STATE CHAMPS</span> 2026</h1>
+      <p class="event-meta">New Jersey State Fair &bull; Sussex County Fairgrounds &bull; Augusta, NJ &bull; August 1, 2026</p>
       <div class="event-pills">
-        <button class="pill pill-day1" data-day="1">Day 1 &bull; June 6 &bull; 1lb Ants &bull; 29 competitors</button>
-        <button class="pill pill-day2" data-day="2">Day 2 &bull; June 7 &bull; 3lb Beetles &bull; 19 competitors</button>
+        <button class="pill pill-day1" data-day="1">Championship Day &bull; August 1 &bull; 4 weight classes</button>
       </div>
     </header>
 
@@ -460,7 +459,7 @@
             <div class="card-title">Event Info &mdash; Sponsors</div>
             <div class="card-dims">1920 &times; 1080</div>
           </div>
-          <p class="card-desc">Sponsor acknowledgment card. Works for both days.</p>
+          <p class="card-desc">Sponsor acknowledgment card for the championship event.</p>
           <div class="url-block">
             <div class="url-label">OBS URL</div>
             <div class="url-text" id="url-sponsors">event-info.html?view=sponsors</div>
@@ -472,21 +471,21 @@
         </div>
       </div>
 
-      <!-- TrueFinals Brackets (Day 2 only) -->
+      <!-- Event registration -->
       <div class="overlay-card" id="card-truefinals" style="border-color:rgba(78,205,196,0.3);display:none">
-        <div class="card-preview" style="color:var(--secondary);font-size:1rem">BRACKETS</div>
+        <div class="card-preview" style="color:var(--secondary);font-size:1rem">EVENT INFO</div>
         <div class="card-body">
           <div class="card-header">
-            <div class="card-title">TrueFinals Brackets</div>
-            <div class="card-dims" style="color:var(--secondary)">LIVE</div>
+            <div class="card-title">Event Registration</div>
+            <div class="card-dims" style="color:var(--secondary)">RCE</div>
           </div>
-          <p class="card-desc">Live bracket — 3lb Beetleweight (19 bots). Published on TrueFinals.</p>
+          <p class="card-desc">Official registration, competition classes, and event information.</p>
           <div class="url-block">
-            <div class="url-label">Bracket URL</div>
-            <div class="url-text" id="url-truefinals">https://truefinals.com/tournament/a6b4515ddb5a44ce</div>
+            <div class="url-label">Event URL</div>
+            <div class="url-text" id="url-truefinals">https://www.robotcombatevents.com/events/5901</div>
           </div>
           <div class="card-actions">
-            <a href="https://truefinals.com/tournament/a6b4515ddb5a44ce" target="_blank" class="btn btn-primary">Open Brackets</a>
+            <a href="https://www.robotcombatevents.com/events/5901" target="_blank" class="btn btn-primary">Open Event</a>
             <button class="btn btn-copy" onclick="copyUrlText('url-truefinals', this)">Copy URL</button>
           </div>
         </div>
@@ -499,14 +498,14 @@
       <div class="section-heading">OBS SCENE COLLECTION</div>
       <p style="color:var(--gray);margin-bottom:16px;font-size:0.9rem;">Download the pre-built OBS scene collection — all 11 overlay scenes are wired up and ready to import.</p>
       <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-        <a href="GSCRL_June_Jumble_2026.json" download class="btn btn-primary" style="font-size:0.9rem;padding:10px 20px;">
+        <a href="GSCRL_NJ_State_Champs_2026.json" download class="btn btn-primary" style="font-size:0.9rem;padding:10px 20px;">
           &#8595; Download Scene Collection
         </a>
         <span style="color:var(--gray);font-size:0.85rem;">Place in <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px">%AppData%\obs-studio\basic\scenes\</code> then reload OBS &rarr; Scene Collection menu</span>
       </div>
       <div style="margin-top:16px;color:var(--gray);font-size:0.82rem;line-height:1.7">
         <strong style="color:var(--light)">Scenes included:</strong>
-        Welcome Day 1 &amp; 2 &bull; Waiting Day 1 &amp; 2 &bull; Match Info Day 1 &amp; 2 &bull; Break Timer &bull; Schedule Day 1 &amp; 2 &bull; Sponsors &bull; Standings
+        Welcome Primary &amp; Alternate &bull; Waiting Primary &amp; Alternate &bull; Match Info Primary &amp; Alternate &bull; Break Timer &bull; Schedule Primary &amp; Alternate &bull; Sponsors &bull; Standings
       </div>
     </div>
 
@@ -526,7 +525,7 @@
 
     <footer class="footer">
       <p>
-        GSCRL June Jumble 2026 &bull;
+        2026 GSCRL NJ State Champs &bull;
         <a href="https://gscrl.org/" target="_blank">gscrl.org</a> &bull;
         <a href="../../index.html">All Overlays</a>
       </p>
@@ -538,8 +537,8 @@
   <script>
     const DAY_CONFIG = {
       1: {
-        label: 'DAY 1 — JUNE 6, 2026',
-        sub: '1lb Antweight (22) • 1lb Plastic Antweight (7) • 10:00 AM Drivers Meeting • 11:00 AM Fights Begin',
+        label: 'CHAMPIONSHIP DAY — AUGUST 1, 2026',
+        sub: '150g Fairyweight • 1lb Antweight • 1lb Plastic Antweight • 3lb Beetleweight',
         urls: {
           welcome:  'welcome-screen.html?day=1',
           waiting:  'waiting-screen.html?day=1',
@@ -547,27 +546,10 @@
           schedule: 'event-info.html?day=1&view=schedule',
         },
         labels: {
-          welcome:  'OBS URL — Day 1',
-          waiting:  'OBS URL — Day 1',
-          match:    'OBS URL — Day 1',
-          schedule: 'OBS URL — Day 1 Schedule',
-        },
-        showBrackets: false,
-      },
-      2: {
-        label: 'DAY 2 — JUNE 7, 2026',
-        sub: '3lb Beetleweight (19) • 12:00 PM – 6:00 PM EDT',
-        urls: {
-          welcome:  'welcome-screen.html?day=2',
-          waiting:  'waiting-screen.html?day=2',
-          match:    'match-info.html?day=2',
-          schedule: 'event-info.html?day=2&view=schedule',
-        },
-        labels: {
-          welcome:  'OBS URL — Day 2',
-          waiting:  'OBS URL — Day 2',
-          match:    'OBS URL — Day 2',
-          schedule: 'OBS URL — Day 2 Schedule',
+          welcome:  'OBS URL — Championship Welcome',
+          waiting:  'OBS URL — Championship Waiting',
+          match:    'OBS URL — Championship Match Info',
+          schedule: 'OBS URL — Championship Schedule',
         },
         showBrackets: true,
       },
@@ -607,8 +589,8 @@
       btn.addEventListener('click', () => setDay(parseInt(btn.dataset.day)));
     });
 
-    // Default to Day 2 (today)
-    setDay(2);
+    // One-day championship event
+    setDay(1);
   </script>
 </body>
 </html>

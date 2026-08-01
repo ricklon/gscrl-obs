@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Info - GSCRL June Jumble 2026</title>
+  <title>Event Info - 2026 GSCRL NJ State Champs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
@@ -241,8 +241,8 @@
 <body>
   <div class="info-container">
     <div class="info-header">
-      <div class="info-title">JUNE <span class="highlight">JUMBLE</span> 2026</div>
-      <div class="day-badge" id="dayBadge">Day 1 &bull; June 6</div>
+      <div class="info-title">NJ <span class="highlight">STATE CHAMPS</span> 2026</div>
+      <div class="day-badge" id="dayBadge">Championship Day &bull; August 1</div>
     </div>
 
     <!-- Overview panel -->
@@ -255,7 +255,7 @@
 
     <!-- Schedule panel -->
     <div class="content-panel" id="panelSchedule" style="display:none">
-      <div class="panel-label" id="scheduleLabel">Day 1 Schedule &mdash; 1lb Antweight &amp; Plastic Antweight</div>
+      <div class="panel-label" id="scheduleLabel">Championship Schedule &mdash; All Weight Classes</div>
       <div class="schedule-list" id="scheduleList">
         <!-- populated by JS -->
       </div>
@@ -280,7 +280,7 @@
       <div class="social-item">&#128247; @_gscrl</div>
       <div class="social-item">&#128172; discord.gg/qwkeeVWgs2</div>
       <div class="social-item">gscrl.org</div>
-      <div class="social-item" id="bracketsLink" style="display:none">&#127942; truefinals.com/tournament/a6b4515ddb5a44ce</div>
+      <div class="social-item" id="bracketsLink" style="display:none">&#127942; robotcombatevents.com/events/5901</div>
     </div>
   </div>
 
@@ -294,36 +294,21 @@
   <script>
     const DAY_CONFIG = {
       1: {
-        badge: 'Day 1 • June 6',
-        scheduleLabel: 'Day 1 Schedule — 1lb Antweight & Plastic Antweight',
+        badge: 'Championship Day • August 1',
+        scheduleLabel: 'Championship Schedule — All Weight Classes',
         schedule: [
-          { time: '10:00 AM', name: 'Drivers Meeting', sub: 'All competitors required', badge: null },
-          { time: '11:00 AM', name: 'Fights Begin', sub: '1lb Antweight pool rounds', badge: 'LIVE', active: true },
-          { time: 'TBD', name: 'Plastic Antweight Rounds', sub: '1lb Plastic Antweight pool rounds', badge: null },
+          { time: '7:00 AM', name: 'Event Opens', sub: 'New Jersey State Fair', badge: null },
+          { time: 'TBD', name: 'Championship Fights', sub: 'All weight classes', badge: 'LIVE', active: true },
+          { time: 'TBD', name: 'Class Rounds', sub: 'Fairy, Ant, Plastic Ant, and Beetle', badge: null },
           { time: 'TBD', name: 'Elimination Rounds', sub: 'Top competitors advance', badge: null },
-          { time: 'TBD', name: 'Finals', sub: '1lb Antweight & Plastic Antweight championships', badge: null },
+          { time: 'TBD', name: 'Finals', sub: '2026 GSCRL season championships', badge: null },
         ],
         stats: [
-          { value: '22', label: '1lb Antweight' },
-          { value: '7', label: 'Plastic Antweight' },
-          { value: '29', label: 'Total Competitors' },
+          { value: '4', label: 'Weight Classes' },
+          { value: '2026', label: 'Season Championship' },
+          { value: 'NJ', label: 'State Champs' },
         ]
       },
-      2: {
-        badge: 'Day 2 • June 7',
-        scheduleLabel: 'Day 2 Schedule — 3lb Beetleweight',
-        schedule: [
-          { time: '12:00 PM', name: 'Fights Begin', sub: '3lb Beetleweight pool rounds', badge: 'LIVE', active: true },
-          { time: 'TBD', name: 'Elimination Rounds', sub: 'Top competitors advance', badge: null },
-          { time: 'TBD', name: 'Finals', sub: '3lb Beetleweight championship', badge: null },
-          { time: '6:00 PM', name: 'Event Ends', sub: 'Thanks for watching!', badge: null },
-        ],
-        stats: [
-          { value: '19', label: '3lb Beetleweight' },
-          { value: '6:00 PM', label: 'Event Ends (EDT)' },
-          { value: '2', label: 'Day Event' },
-        ]
-      }
     };
 
     let currentView = 'overview';
@@ -374,7 +359,7 @@
     // URL params
     (function() {
       const p = new URLSearchParams(window.location.search);
-      const day = parseInt(p.get('day')) || 1;
+      const day = 1;
       const view = p.get('view') || 'overview';
       setDay(day);
       setView(view);
