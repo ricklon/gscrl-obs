@@ -325,7 +325,7 @@
       <h1 class="event-title">NJ <span class="highlight">STATE CHAMPS</span> 2026</h1>
       <p class="event-meta">New Jersey State Fair &bull; Sussex County Fairgrounds &bull; Augusta, NJ &bull; August 1, 2026</p>
       <div class="event-pills">
-        <button class="pill pill-day1" data-day="1">Championship Day &bull; August 1 &bull; 4 weight classes</button>
+        <span class="pill pill-day1 active">Championship Day &bull; August 1 &bull; 4 weight classes</span>
       </div>
     </header>
 
@@ -505,7 +505,7 @@
       </div>
       <div style="margin-top:16px;color:var(--gray);font-size:0.82rem;line-height:1.7">
         <strong style="color:var(--light)">Scenes included:</strong>
-        Welcome Primary &amp; Alternate &bull; Waiting Primary &amp; Alternate &bull; Match Info Primary &amp; Alternate &bull; Break Timer &bull; Schedule Primary &amp; Alternate &bull; Sponsors &bull; Standings
+        Welcome &bull; Waiting &bull; Match Info &bull; Break Timer &bull; Schedule &bull; Sponsors &bull; Standings
       </div>
     </div>
 
@@ -535,15 +535,14 @@
   </div>
 
   <script>
-    const DAY_CONFIG = {
-      1: {
+    const EVENT_CONFIG = {
         label: 'CHAMPIONSHIP DAY — AUGUST 1, 2026',
         sub: '150g Fairyweight • 1lb Antweight • 1lb Plastic Antweight • 3lb Beetleweight',
         urls: {
-          welcome:  'welcome-screen.html?day=1',
-          waiting:  'waiting-screen.html?day=1',
-          match:    'match-info.html?day=1',
-          schedule: 'event-info.html?day=1&view=schedule',
+          welcome:  'welcome-screen.html',
+          waiting:  'waiting-screen.html',
+          match:    'match-info.html',
+          schedule: 'event-info.html?view=schedule',
         },
         labels: {
           welcome:  'OBS URL — Championship Welcome',
@@ -552,11 +551,10 @@
           schedule: 'OBS URL — Championship Schedule',
         },
         showBrackets: true,
-      },
     };
 
-    function setDay(day) {
-      const cfg = DAY_CONFIG[day];
+    function initializeEvent() {
+      const cfg = EVENT_CONFIG;
 
       document.getElementById('dayLabel').textContent = cfg.label;
       document.getElementById('daySub').textContent = cfg.sub;
@@ -569,9 +567,6 @@
 
       document.getElementById('card-truefinals').style.display = cfg.showBrackets ? '' : 'none';
 
-      document.querySelectorAll('[data-day]').forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.dataset.day) === day);
-      });
     }
 
     function copyUrlText(id, btn) {
@@ -585,12 +580,8 @@
       });
     }
 
-    document.querySelectorAll('[data-day]').forEach(btn => {
-      btn.addEventListener('click', () => setDay(parseInt(btn.dataset.day)));
-    });
-
     // One-day championship event
-    setDay(1);
+    initializeEvent();
   </script>
 </body>
 </html>

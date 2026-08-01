@@ -216,21 +216,14 @@
   </div>
 
   <script>
-    const DAY_CONFIG = {
-      1: {
+    const EVENT_CONFIG = {
         badge: 'Championship Day • August 1, 2026',
         classes: '150g Fairyweight • 1lb Antweight • 1lb Plastic Antweight • 3lb Beetleweight',
-      },
-      2: {
-        badge: 'Championship Day • August 1, 2026',
-        classes: '150g Fairyweight • 1lb Antweight • 1lb Plastic Antweight • 3lb Beetleweight',
-      }
     };
 
     function init() {
       const params = new URLSearchParams(window.location.search);
-      const day = parseInt(params.get('day')) || 1;
-      const config = DAY_CONFIG[day] || DAY_CONFIG[1];
+      const config = EVENT_CONFIG;
 
       document.getElementById('dayBadge').textContent = config.badge;
       document.getElementById('classesEl').textContent = config.classes;

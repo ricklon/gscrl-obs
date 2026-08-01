@@ -365,8 +365,7 @@
   </div>
 
   <script>
-    const DAY_CONFIG = {
-      1: {
+    const EVENT_CONFIG = {
         badge: 'Championship Day • August 1, 2026',
         competitors: 'Championship Competitors',
         classes: ['150g Fairyweight', '1lb Antweight', '1lb Plastic Antweight', '3lb Beetleweight'],
@@ -374,22 +373,11 @@
           { time: '7:00 AM', label: 'Event Opens' },
           { time: '10:00 PM', label: 'Event Ends' },
         ],
-      },
-      2: {
-        badge: 'Championship Day • August 1, 2026',
-        competitors: 'Championship Competitors',
-        classes: ['150g Fairyweight', '1lb Antweight', '1lb Plastic Antweight', '3lb Beetleweight'],
-        schedule: [
-          { time: '7:00 AM', label: 'Event Opens' },
-          { time: '10:00 PM', label: 'Event Ends' },
-        ],
-      }
     };
 
     function init() {
       const params = new URLSearchParams(window.location.search);
-      const day = parseInt(params.get('day')) || 1;
-      const config = DAY_CONFIG[day] || DAY_CONFIG[1];
+      const config = EVENT_CONFIG;
 
       document.getElementById('dayBadge').textContent = config.badge;
       document.getElementById('competitorsEl').textContent = config.competitors;

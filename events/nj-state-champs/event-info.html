@@ -292,8 +292,7 @@
   </div>
 
   <script>
-    const DAY_CONFIG = {
-      1: {
+    const EVENT_CONFIG = {
         badge: 'Championship Day • August 1',
         scheduleLabel: 'Championship Schedule — All Weight Classes',
         schedule: [
@@ -312,11 +311,8 @@
     };
 
     let currentView = 'overview';
-    let currentDay = 1;
-
-    function setDay(day) {
-      currentDay = day;
-      const config = DAY_CONFIG[day];
+    function initializeEvent() {
+      const config = EVENT_CONFIG;
 
       document.getElementById('dayBadge').textContent = config.badge;
       document.getElementById('scheduleLabel').textContent = config.scheduleLabel;
@@ -359,9 +355,8 @@
     // URL params
     (function() {
       const p = new URLSearchParams(window.location.search);
-      const day = 1;
       const view = p.get('view') || 'overview';
-      setDay(day);
+      initializeEvent();
       setView(view);
 
       if (day === 2) {
