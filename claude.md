@@ -1,3 +1,8 @@
+# Historical design context
+
+The projects are now combined. Read README.md, AGENTS.md, and docs/CONSOLIDATION.md
+for current layout, event configuration, and operation. The content below predates consolidation.
+
 # CLAUDE.md — gscrl-obs
 
 ## What this project is

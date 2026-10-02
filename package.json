@@ -1,15 +1,22 @@
 {
   "name": "gscrl-obs",
   "version": "1.0.0",
-  "description": "Browser-based OBS overlays for Garden State Robot League live streaming",
+  "description": "GSCRL broadcast overlays, event configuration, and TrueFinals live service",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "dev": "python3 -m http.server 8000",
-    "lint": "echo 'Add ESLint configuration here' && exit 0",
+    "start": "npm run dev",
+    "dev": "npm run build:static && python3 -m http.server 8010 --bind 127.0.0.1 --directory dist/site",
+    "lint": "node scripts/check.cjs",
     "format": "echo 'Add Prettier configuration here' && exit 0",
-    "test": "echo 'Add testing scripts here' && exit 0",
-    "deploy": "echo 'Deployment handled by GitHub Pages' && exit 0"
+    "test": "npm run check && node --test test/*.test.cjs && npm --prefix services/truefinals test",
+    "deploy": "echo 'Deployment handled by GitHub Pages' && exit 0",
+    "setup:truefinals": "node scripts/configure-truefinals.cjs",
+    "start:live": "npm --prefix services/truefinals start",
+    "dev:live": "npm --prefix services/truefinals run dev",
+    "install:live": "pnpm --dir services/truefinals install --frozen-lockfile",
+    "sync:events": "node scripts/sync-events.cjs",
+    "build:static": "node scripts/build-static.cjs",
+    "check": "node scripts/sync-events.cjs --check && node scripts/check.cjs && npm --prefix services/truefinals run check"
   },
   "keywords": [
     "obs",
@@ -24,14 +31,17 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gscrl/gscrl-obs.git"
+    "url": "https://github.com/ricklon/gscrl-obs.git"
   },
   "bugs": {
-    "url": "https://github.com/gscrl/gscrl-obs/issues"
+    "url": "https://github.com/ricklon/gscrl-obs/issues"
   },
-  "homepage": "https://github.com/gscrl/gscrl-obs#readme",
+  "homepage": "https://ricklon.github.io/gscrl-obs/",
   "dependencies": {},
   "devDependencies": {
     "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

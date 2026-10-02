@@ -2,9 +2,51 @@
 
 Browser-based overlays for Garden State Robot League live streaming production.
 
+## Current event: Mechanical Mayhem Fall — Season 5 opener
+
+October 3–4, 2026, at Sussex County Maker Fest, Ideal Farm & Garden Center, Lafayette Township, NJ.
+Saturday: Fairyweight, Plastic Antweight, Standard Antweight. Sunday: Beetleweight.
+[Official listing](https://www.robotcombatevents.com/events/9596) · [Event hub](events/mechanical-mayhem-season-5/index.html) · [OBS setup](events/mechanical-mayhem-season-5/SETUP.md).
+
+Use the hosted or local 12-scene OBS collection linked from the event hub. Run a local server with
+
+    npm run dev
+
+The TrueFinals service now lives in `services/truefinals`. Both applications use
+`config/events.json`; Mechanical Mayhem already has four bracket assignments.
+Use `npm run setup:truefinals` to change brackets, then restart the live service.
+See [the consolidation plan and cutover checklist](docs/CONSOLIDATION.md).
+
+## Combined project commands
+
+Use Node.js 22 or newer (`nvm use`). Static previews and checks need no npm install.
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Build public assets and serve static overlays at localhost:8010 |
+| `npm run install:live` | Install live-service dependencies with pnpm and its existing lockfile |
+| `npm run start:live` | Start the live service at localhost:3000 |
+| `npm run dev:live` | Start the live service with Node watch mode |
+| `npm run sync:events` | Regenerate static event configuration after catalog edits |
+| `npm run build:static` | Export public assets to dist/site |
+| `npm test` | Validate static overlays, scene collections, catalog integration, and polling |
+
+For live data, copy `services/truefinals/.env.example` to
+`services/truefinals/.env` and set credentials there. That file is loaded relative
+to the service directory regardless of the working directory. See the
+[live-service guide](services/truefinals/README.md) for API and overlay URLs.
+Only one copy of the live poller should run with the same credentials at a time.
+
+Edit `config/events.json` for event data, including the active event and its
+`display` metadata. Keep previous events and stable division keys. Generated
+`event-config.js` files are committed so existing static URLs still work without
+Node or the live service. After editing, run `npm run sync:events` and rebuild or
+restart the static preview. A null bracket ID is allowed for static preparation;
+the live service requires all selected event divisions to have valid IDs.
+
 ## Overview
 
-A collection of self-contained HTML overlays designed for use as OBS browser sources. No build step required — just static files that work anywhere.
+A collection of self-contained HTML overlays designed for use as OBS browser sources. Committed HTML and generated configuration work as static files. The deployment export copies public assets without bundling them.
 
 ## Features
 
@@ -53,31 +95,15 @@ break-timer.html?duration=10&label=BRB&color=FF6B6B&hidecontrols=true
 
 GitHub Pages is the simplest way to host these overlays for free.
 
-#### Setup Steps
+#### Setup
 
-1. Go to your repository on GitHub
-2. Click **Settings** (gear icon in the top menu)
-3. In the left sidebar, click **Pages** (under "Code and automation")
-4. Under **Build and deployment**:
-   - **Source:** Select `Deploy from a branch`
-   - **Branch:** Select `main` (or `master`)
-   - **Folder:** Select `/ (root)`
-5. Click **Save**
+Set repository **Settings → Pages → Build and deployment → Source** to
+**GitHub Actions**. `.github/workflows/pages.yml` checks both applications and
+publishes only `dist/site` from `main`. The live service is deployed separately;
+its source and credentials are excluded from the static export.
 
-#### GitHub Pages Settings Summary
-
-| Setting | Value |
-|---------|-------|
-| Source | Deploy from a branch |
-| Branch | `main` |
-| Folder | `/ (root)` |
-
-After saving, GitHub will build and deploy your site. This takes 1-2 minutes. Your overlays will be available at:
-
-```
-https://ricklon.github.io/gscrl-obs/
-https://ricklon.github.io/gscrl-obs/overlays/break-timer.html
-```
+Existing URLs remain `https://ricklon.github.io/gscrl-obs/` and
+`https://ricklon.github.io/gscrl-obs/overlays/break-timer.html`.
 
 #### Custom Domain (Optional)
 
@@ -93,8 +119,8 @@ To use a custom domain like `obs.gscrl.org`:
 2. Click **Create a project** > **Connect to Git**
 3. Select this repository
 4. Build settings:
-   - **Build command:** (leave empty)
-   - **Build output directory:** `/`
+   - **Build command:** `npm run build:static`
+   - **Build output directory:** `dist/site`
 5. Click **Save and Deploy**
 
 Your overlays will be available at:
@@ -108,15 +134,15 @@ Just open the HTML files directly in your browser — no server required.
 
 For a local server (enables localStorage persistence):
 ```bash
-npx serve .
-# or
-python -m http.server 8000
+npm run dev
 ```
 
 ## Project Structure
 
 ```
 gscrl-obs/
+├── config/events.json         # Shared event catalog
+├── services/truefinals/        # Live server, poller, overlays and match log
 ├── index.html                 # Landing page / overlay directory
 ├── overlays/
 │   ├── break-timer.html       # Countdown timer for breaks
@@ -247,7 +273,7 @@ See [CUSTOMIZATION.md](docs/CUSTOMIZATION.md) for detailed theming options.
 
 - [x] **Phase 1: Foundation** — Break timer, repo setup, deployment
 - [x] **Phase 2: Core Overlays** — Match info ✓, countdown, lower third
-- [ ] **Phase 3: Integration** — True Finals API, WebSocket control
+- [ ] **Phase 3: Integration** — Unified manual/live controls (TrueFinals service is available)
 - [ ] **Phase 4: Polish** — Sponsors, sound effects, animations
 
 ## Event Info Overlay

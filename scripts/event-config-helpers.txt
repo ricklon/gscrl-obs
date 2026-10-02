@@ -1,0 +1,10 @@
+// Day defaults to Saturday and stays pinned throughout a live scene.
+function getEventDay() { return new URLSearchParams(window.location.search).get('day') === '2' ? 2 : 1; }
+function applyEventColor() {
+  const color = new URLSearchParams(window.location.search).get('color');
+  if (color && /^#?[0-9a-f]{6}$/i.test(color)) {
+    const hex = '#' + color.replace('#', '');
+    document.documentElement.style.setProperty('--gscrl-primary', hex);
+    document.documentElement.style.setProperty('--glow-color', hex);
+  }
+}
