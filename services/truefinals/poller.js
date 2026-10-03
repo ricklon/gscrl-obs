@@ -106,8 +106,9 @@ let inFlight = null;
 async function poll(tournamentIds) {
   const now = Date.now();
   if (inFlight) return inFlight;
-  if (now - lastFetch < Math.max(21000, tournamentIds.length * REQUEST_INTERVAL_MS)) return cache;
+  if (now - lastFetch < 5000) return cache;
 
+  lastFetch = now; // Measure cadence from batch start, not completion.
   inFlight = (async () => {
     try {
     const results = await Promise.allSettled(
@@ -122,12 +123,11 @@ async function poll(tournamentIds) {
     if (failed) throw failed.reason;
     const stories = results.map(result => result.value);
     cache = { ok: true, tournaments: stories, fetchedAt: Date.now() };
-    lastFetch = Date.now();
     } catch (err) {
       console.error('[poller] fetch error:', err.message);
       cache = cache ?? { ok: false, error: err.message, tournaments: [] };
+      lastFetch = Date.now(); // Back off after failed requests.
     } finally {
-      lastFetch = Date.now(); // also back off after failed requests
       inFlight = null;
     }
 

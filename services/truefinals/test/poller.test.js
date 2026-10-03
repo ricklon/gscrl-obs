@@ -36,11 +36,11 @@ test('four divisions share a request budget, concurrent polls, cache and failure
   assert.equal(first.tournaments.length, 4);
   assert.equal(first, concurrent);
   assert.equal(requests.length, 8);
-  assert.equal(await poll(ids), first);
-  assert.equal(requests.length, 8);
+  await poll(ids); // A completed batch has no additional 26-second cooldown.
+  assert.equal(requests.length, 12);
   now += 600001; // include periodic player refresh in the same request budget
   await poll(ids);
-  assert.equal(requests.length, 16);
+  assert.equal(requests.length, 20);
   now += 26001;
   fail = true;
   const stale = await poll(ids);

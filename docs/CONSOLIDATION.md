@@ -69,7 +69,9 @@ Historical static event pages remain snapshots.
    For systemd, update WorkingDirectory and ExecStart to the new service folder,
    reload the unit, and start it using the existing host's Node executable.
 6. Check /api/event, /api/story, all four pinned division URLs, matchlog timing,
-   and chapter export. Initial data may take about a minute. Check static
+   and chapter export. Initial data may take about a minute. Polling checks run every 5 seconds,
+   with all upstream requests spaced at least 6.5 seconds apart. Four divisions
+   share that budget (roughly 26 seconds per update cycle after startup). Check static
    overlays and both day's collections in OBS, including transparency and sizing.
 7. Keep ports 8010 and 3000 and existing origins to preserve browser settings.
    Static preview now serves dist/site; rebuild it after edits. Existing scene

@@ -68,7 +68,11 @@ per event; old global timing values are intentionally not reused.
 
 `/api/story` includes event and division metadata. `/api/matchlog` remains an
 array. All requests to TrueFinals are spaced at least 6.5 seconds apart, including
-startup and player refreshes. Initial data for four divisions can take about a
+startup and player refreshes. The server checks every 5 seconds; the match bar
+checks the local server every 3 seconds. Successful polling batches can run
+back-to-back without an extra cooldown. With four divisions, fresh data normally
+arrives about every 26 seconds, plus API response time; this is not a 5-second
+upstream refresh for every division. Initial data for four divisions can take about a
 minute. A failed poll retains the last successful story; it may be stale during
 an upstream outage. Cache is in memory and resets on restart.
 

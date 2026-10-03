@@ -30,7 +30,7 @@ app.get('/api/matchlog', async (req, res) => {
 });
 
 // Background poll to keep cache warm
-setInterval(() => poll(TOURNAMENT_IDS), 8000);
+setInterval(() => poll(TOURNAMENT_IDS), 5000);
 poll(TOURNAMENT_IDS); // initial fetch
 
 app.listen(PORT, () => {
