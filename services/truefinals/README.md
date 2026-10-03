@@ -39,6 +39,12 @@ Run `npm run check` and `npm test` for local checks.
 - `http://localhost:3000/matchbar.html` — horizontal match bar.
 - `http://localhost:3000/matchlog.html` — match log and chapter export.
 
+For the live match bar, use a 1920 × 48 OBS Browser Source on a 1920-wide
+canvas, with no cropping or scaling. The middle match label is centered in the
+full source width; Last Result stays inside the right half. Refresh the browser
+source after layout updates. Position the strip at Y=0 for the top, or Y=1032
+for the bottom of a 1920 × 1080 canvas.
+
 Append `?tournament=fairies`, `plants`, `ants`, or `beetles` to either overlay
 URL to pin a division. `antweight`, `fairyweight`, and `beetleweight` are aliases;
 raw tournament IDs also work. Without a selector the overlay follows an active

@@ -19,13 +19,20 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 48px;
-      display: flex;
+      display: grid;
+      /* Equal outer columns keep the match label at the viewport midpoint. */
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: stretch;
       opacity: 0;
       transform: translateY(-100%);
       transition: opacity 350ms ease, transform 350ms cubic-bezier(0.22,1,0.36,1);
     }
     #bar.visible { opacity: 1; transform: translateY(0); }
+
+    .match-half {
+      display: flex;
+      min-width: 0;
+    }
 
     /* ── Score badges ── */
     .score {
@@ -155,11 +162,14 @@
 <body>
 
 <div id="bar">
-  <!-- Left: score + bot name -->
-  <div class="score" id="score1">0</div>
-  <div class="side left">
-    <span class="ci-dot" id="ci1"></span>
-    <span class="bot-name" id="name1">—</span>
+  <!-- Left half: score + bot name -->
+  <div class="match-half">
+    <div class="score" id="score1">0</div>
+    <div class="side left">
+      <span class="ci-dot" id="ci1"></span>
+      <span class="bot-name" id="name1">—</span>
+    </div>
+
   </div>
 
   <!-- Center: bracket + round -->
@@ -168,21 +178,23 @@
     <span class="center-round"   id="round-label">—</span>
   </div>
 
-  <!-- Right: bot name + score -->
-  <div class="side right">
-    <span class="ci-dot" id="ci2"></span>
-    <span class="bot-name" id="name2">—</span>
-  </div>
-  <div class="score" id="score2">0</div>
+  <!-- Right half: bot name + score + last result -->
+  <div class="match-half">
+    <div class="side right">
+      <span class="ci-dot" id="ci2"></span>
+      <span class="bot-name" id="name2">—</span>
+    </div>
+    <div class="score" id="score2">0</div>
 
-  <!-- Divider -->
-  <div class="divider"></div>
+    <!-- Divider -->
+    <div class="divider"></div>
 
-  <!-- Last result — inline, same height -->
-  <div id="last-result" class="empty">
-    <div class="result-label">Last Result</div>
-    <div class="result-winner" id="result-winner">—</div>
-    <div class="result-detail" id="result-detail"></div>
+    <!-- Last result — inline, same height -->
+    <div id="last-result" class="empty">
+      <div class="result-label">Last Result</div>
+      <div class="result-winner" id="result-winner">—</div>
+      <div class="result-detail" id="result-detail"></div>
+    </div>
   </div>
 </div>
 
