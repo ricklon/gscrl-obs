@@ -7,9 +7,10 @@ const HEADERS = {
   'x-api-key': process.env.TRUEFINALS_API_KEY,
 };
 
-// Rate limit: 10 req / 60s window.
-// Space every request, including startup, refreshes and retries, below 10/min.
-const REQUEST_INTERVAL_MS = 6500;
+// Target four division game requests per 10 seconds. The upstream quota is
+// unconfirmed; all calls share this queue and honor HTTP 429 backoff.
+const REQUEST_INTERVAL_MS = 2500;
+const POLL_INTERVAL_MS = 10000;
 let requestQueue = Promise.resolve();
 let nextRequestAt = 0;
 const PLAYERS_TTL_MS = 10 * 60 * 1000;
@@ -34,6 +35,14 @@ function request(path) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try { resolve(JSON.parse(data)); } catch (e) { reject(new Error('JSON parse error')); }
         } else {
+          if (res.statusCode === 429) {
+            const retryAfter = res.headers?.['retry-after'];
+            const seconds = Number(retryAfter);
+            const delay = retryAfter && Number.isFinite(seconds)
+              ? seconds * 1000 : Date.parse(retryAfter) - Date.now();
+            nextRequestAt = Math.max(nextRequestAt, Date.now() +
+              (Number.isFinite(delay) && delay > 0 ? delay : 60000));
+          }
           reject(new Error(`TrueFinals HTTP ${res.statusCode}`));
         }
       });
@@ -103,36 +112,35 @@ let rawCache = {}; // { [tournamentId]: { games, players } } — for matchlog
 let lastFetch = 0;
 let inFlight = null;
 
+function getStory(tournamentIds) {
+  const current = cache ?? { ok: false, tournaments: [] };
+  return { ...current, tournaments: tournamentIds.flatMap(id =>
+    current.tournaments.filter(t => t.tournamentId === id)) };
+}
+
 async function poll(tournamentIds) {
   const now = Date.now();
   if (inFlight) return inFlight;
-  if (now - lastFetch < 5000) return cache;
+  if (now - lastFetch < POLL_INTERVAL_MS) return cache;
 
-  lastFetch = now; // Measure cadence from batch start, not completion.
+  lastFetch = now;
   inFlight = (async () => {
-    try {
-    const results = await Promise.allSettled(
-      tournamentIds.map(async (id) => {
+    await Promise.all(tournamentIds.map(async (id) => {
+      try {
         const { title, players } = await getStatic(id);
         const games = await apiFetch(`/v1/tournaments/${id}/games`);
         rawCache[id] = { games, players };
-        return { tournamentId: id, tournamentTitle: title, ...buildStory(games, players) };
-      })
-    );
-    const failed = results.find(result => result.status === 'rejected');
-    if (failed) throw failed.reason;
-    const stories = results.map(result => result.value);
-    cache = { ok: true, tournaments: stories, fetchedAt: Date.now() };
-    } catch (err) {
-      console.error('[poller] fetch error:', err.message);
-      cache = cache ?? { ok: false, error: err.message, tournaments: [] };
-      lastFetch = Date.now(); // Back off after failed requests.
-    } finally {
-      inFlight = null;
-    }
-
+        const story = { tournamentId: id, tournamentTitle: title, ...buildStory(games, players) };
+        // Publish immediately; an unrelated slow or failed division cannot hold this up.
+        const stories = (cache?.tournaments ?? []).filter(t => t.tournamentId !== id);
+        cache = { ok: true, tournaments: [...stories, story], fetchedAt: Date.now() };
+      } catch (err) {
+        console.error('[poller] fetch error:', err.message);
+        cache = cache ?? { ok: false, error: err.message, tournaments: [] };
+      }
+    }));
     return cache;
-  })();
+  })().finally(() => { inFlight = null; });
 
   return inFlight;
 }
@@ -179,4 +187,4 @@ function buildMatchLog(tournamentIds) {
   return entries;
 }
 
-module.exports = { poll, buildMatchLog };
+module.exports = { poll, getStory, buildMatchLog };

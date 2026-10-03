@@ -67,14 +67,20 @@ edits when bracket IDs change. Stream start and fight offset are saved separatel
 per event; old global timing values are intentionally not reused.
 
 `/api/story` includes event and division metadata. `/api/matchlog` remains an
-array. All requests to TrueFinals are spaced at least 6.5 seconds apart, including
-startup and player refreshes. The server checks every 5 seconds; the match bar
-checks the local server every 3 seconds. Successful polling batches can run
-back-to-back without an extra cooldown. With four divisions, fresh data normally
-arrives about every 26 seconds, plus API response time; this is not a 5-second
-upstream refresh for every division. Initial data for four divisions can take about a
-minute. A failed poll retains the last successful story; it may be stale during
-an upstream outage. Cache is in memory and resets on restart.
+array. The server targets a fresh games fetch for every division every 10 seconds.
+All authenticated requests share a queue spaced at least 2.5 seconds apart
+(24 requests/minute for four divisions). The upstream quota is unconfirmed;
+HTTP 429 responses pause the queue according to Retry-After, or 60 seconds if
+no usable delay is supplied. Startup and player refreshes share this queue and
+can extend a cycle, as can slow API responses.
+
+The match bar checks the local server every 3 seconds. API responses return the
+latest cached data immediately, and each division publishes as soon as its fetch
+completes. A failed division retains its last successful story while others can
+update. Cache is in memory and resets on restart; initial four-division data takes
+roughly 20 seconds plus API response time. After changing events, verify all four
+divisions have populated before broadcasting.
+
 
 For existing deployments, first follow [the cutover checklist](../../docs/CONSOLIDATION.md). For PM2 deployments, use `pm2 start ecosystem.config.js` initially, then
 `pm2 restart gscrl-truefinals --update-env` after configuration changes.
