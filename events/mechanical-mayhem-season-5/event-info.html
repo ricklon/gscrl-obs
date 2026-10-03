@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Info - 2026 GSCRL NJ State Champs</title>
+  <title>Event Info - GSCRL Mechanical Mayhem — Season 5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
@@ -241,8 +241,8 @@
 <body>
   <div class="info-container">
     <div class="info-header">
-      <div class="info-title">NJ <span class="highlight">STATE CHAMPS</span> 2026</div>
-      <div class="day-badge" id="dayBadge">Championship Day &bull; August 1</div>
+      <div class="info-title">MECHANICAL <span class="highlight">MAYHEM</span></div>
+      <div class="day-badge" id="dayBadge">Season 5 Opener &bull; October 3–4</div>
     </div>
 
     <!-- Overview panel -->
@@ -255,24 +255,16 @@
 
     <!-- Schedule panel -->
     <div class="content-panel" id="panelSchedule" style="display:none">
-      <div class="panel-label" id="scheduleLabel">Championship Schedule &mdash; All Weight Classes</div>
+      <div class="panel-label" id="scheduleLabel">Season Opener Schedule &mdash; All times EDT</div>
       <div class="schedule-list" id="scheduleList">
         <!-- populated by JS -->
       </div>
     </div>
 
-    <!-- Sponsors panel -->
+    <!-- Event partners panel -->
     <div class="content-panel" id="panelSponsors" style="display:none">
-      <div class="panel-label">Proudly Sponsored By</div>
-      <div class="sponsors-grid">
-        <div class="sponsor-card">FUBAR Labs</div>
-        <div class="sponsor-card">ItGresa Robotics</div>
-        <div class="sponsor-card">Repeat Robotics</div>
-        <div class="sponsor-card">Warren UAS</div>
-        <div class="sponsor-card">Warren County Board of Tourism</div>
-        <div class="sponsor-card">Just &lsquo;Cuz Robotics</div>
-        <div class="sponsor-card">Turnabot</div>
-      </div>
+      <div class="panel-label">Event Partners &amp; Volunteers</div>
+      <div class="sponsors-grid" id="sponsorsGrid"></div>
     </div>
 
     <div class="social-footer" id="socialFooter">
@@ -280,7 +272,7 @@
       <div class="social-item">&#128247; @_gscrl</div>
       <div class="social-item">&#128172; discord.gg/qwkeeVWgs2</div>
       <div class="social-item">gscrl.org</div>
-      <div class="social-item" id="bracketsLink" style="display:none">&#127942; robotcombatevents.com/events/5901</div>
+      <div class="social-item" id="bracketsLink" style="display:none">&#127942; robotcombatevents.com/events/9596</div>
     </div>
   </div>
 
@@ -288,87 +280,30 @@
   <div class="view-selector obs-hide">
     <button class="view-btn active" data-view="overview">Overview</button>
     <button class="view-btn" data-view="schedule">Schedule</button>
-    <button class="view-btn" data-view="sponsors">Sponsors</button>
+    <button class="view-btn" data-view="sponsors">Partners</button>
   </div>
 
+  <script src="event-config.js"></script>
   <script>
-    const EVENT_CONFIG = {
-        badge: 'Championship Day • August 1',
-        scheduleLabel: 'Championship Schedule — All Weight Classes',
-        schedule: [
-          { time: '7:00 AM', name: 'Event Opens', sub: 'New Jersey State Fair', badge: null },
-          { time: 'TBD', name: 'Championship Fights', sub: 'All weight classes', badge: 'LIVE', active: true },
-          { time: 'TBD', name: 'Class Rounds', sub: 'Fairy, Ant, Plastic Ant, and Beetle', badge: null },
-          { time: 'TBD', name: 'Elimination Rounds', sub: 'Top competitors advance', badge: null },
-          { time: 'TBD', name: 'Finals', sub: '2026 GSCRL season championships', badge: null },
-        ],
-        stats: [
-          { value: '4', label: 'Weight Classes' },
-          { value: '2026', label: 'Season Championship' },
-          { value: 'NJ', label: 'State Champs' },
-        ]
-    };
-
-    let currentView = 'overview';
-    function initializeEvent() {
-      const config = EVENT_CONFIG;
-
-      document.getElementById('dayBadge').textContent = config.badge;
-      document.getElementById('scheduleLabel').textContent = config.scheduleLabel;
-
-      // Overview stats
-      document.getElementById('overviewGrid').innerHTML = config.stats.map(s => `
-        <div class="overview-stat">
-          <div class="stat-value">${s.value}</div>
-          <div class="stat-label">${s.label}</div>
-        </div>
-      `).join('');
-
-      // Schedule
-      document.getElementById('scheduleList').innerHTML = config.schedule.map(item => `
-        <div class="schedule-item${item.active ? ' active' : ''}">
-          <div class="schedule-time">${item.time}</div>
-          <div class="schedule-text">
-            <div class="schedule-name">${item.name}</div>
-            ${item.sub ? `<div class="schedule-sub">${item.sub}</div>` : ''}
-          </div>
-          ${item.badge ? `<div class="schedule-badge">${item.badge}</div>` : ''}
-        </div>
-      `).join('');
-    }
-
+    const config = MechanicalMayhem.days[getEventDay()];
+    document.getElementById('dayBadge').textContent = config.badge;
+    document.getElementById('scheduleLabel').textContent = config.label + ' — All times EDT';
+    const stats = [{value: '2026–27', label: 'Season 5'}, {value: String(config.classes.length), label: 'Classes Today'}, {value: '11 AM', label: 'Fights Begin'}];
+    document.getElementById('overviewGrid').innerHTML = stats.map(s => '<div class="overview-stat"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div></div>').join('');
+    document.getElementById('scheduleList').innerHTML = MechanicalMayhem.schedule.map(item => '<div class="schedule-item"><div class="schedule-time">'+item.time+'</div><div class="schedule-text"><div class="schedule-name">'+item.name+'</div></div></div>').join('');
+    const sponsorGrid = document.getElementById('sponsorsGrid');
+    const sponsors = MechanicalMayhem.sponsors.length ? MechanicalMayhem.sponsors : ['Thank you to our volunteers and event partners'];
+    sponsorGrid.replaceChildren(...sponsors.map(name => { const el = document.createElement('div'); el.className = 'sponsor-card'; el.textContent = name; return el; }));
+    document.getElementById('bracketsLink').style.display = '';
     function setView(view) {
       view = ['overview', 'schedule', 'sponsors'].includes(view) ? view : 'overview';
-      currentView = view;
-      document.getElementById('panelOverview').style.display = view === 'overview' ? '' : 'none';
-      document.getElementById('panelSchedule').style.display = view === 'schedule' ? '' : 'none';
-      document.getElementById('panelSponsors').style.display = view === 'sponsors' ? '' : 'none';
-      document.querySelectorAll('.view-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.view === view);
-      });
+      for (const name of ['overview', 'schedule', 'sponsors']) document.getElementById('panel'+name[0].toUpperCase()+name.slice(1)).style.display = name === view ? '' : 'none';
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
     }
-
-    document.querySelectorAll('.view-btn').forEach(btn => {
-      btn.addEventListener('click', () => setView(btn.dataset.view));
-    });
-
-    // URL params
-    (function() {
-      const p = new URLSearchParams(window.location.search);
-      const view = p.get('view') || 'overview';
-      initializeEvent();
-      setView(view);
-
-      document.getElementById('bracketsLink').style.display = '';
-
-      if (p.has('color')) {
-        const hex = '#' + p.get('color').replace('#', '');
-        if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-          document.documentElement.style.setProperty('--gscrl-primary', hex);
-          document.documentElement.style.setProperty('--glow-color', hex);
-        }
-      }
-    })();
-  </script>
+    document.querySelectorAll('.view-btn').forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+    setView(new URLSearchParams(window.location.search).get('view'));
+    applyEventColor();
+    if (new URLSearchParams(window.location.search).get('hidecontrols') === 'true') document.querySelector('.view-selector').style.display = 'none';
+</script>
 </body>
 </html>

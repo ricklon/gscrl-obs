@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSCRL Mechanical Mayhem — Season 5 — OBS Overlays</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #ffffff;
+      --gray: #888899;
+      --font-display: 'Russo One', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--darker);
+      color: var(--light);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .event-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .event-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--secondary);
+      margin-bottom: 12px;
+    }
+
+    .event-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--light);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .event-title .highlight { color: var(--primary); }
+
+    .event-meta {
+      font-size: 0.875rem;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .event-pills {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .pill {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill-day1 { background: rgba(255,107,107,0.15); border: 1px solid var(--primary); color: var(--primary); }
+    .pill-day2 { background: rgba(78,205,196,0.15); border: 1px solid var(--secondary); color: var(--secondary); }
+    .pill-venue { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--gray); }
+
+    /* Day sections */
+    .day-section { margin-bottom: 48px; }
+
+    .day-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .day-label {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--light);
+    }
+
+    .day-sub {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    .day-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Overlay cards */
+    .overlays-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .overlay-card {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .overlay-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(255,107,107,0.15);
+      transform: translateY(-3px);
+    }
+
+    .card-preview {
+      height: 64px;
+      background: var(--darker);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.08);
+      letter-spacing: 0.1em;
+    }
+
+    .card-body { padding: 16px; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-dims {
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: var(--gray);
+      background: rgba(255,255,255,0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+
+    /* URL block */
+    .url-block {
+      background: var(--darker);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .url-label {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      padding: 4px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .url-text {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--secondary);
+      padding: 8px 10px;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--primary); color: var(--light); }
+    .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 0 12px var(--primary); }
+    .btn-secondary { background: transparent; color: var(--light); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+    .btn-copy { background: rgba(78,205,196,0.15); color: var(--secondary); border: 1px solid rgba(78,205,196,0.3); }
+    .btn-copy:hover { background: rgba(78,205,196,0.25); }
+    .btn-copy.copied { background: rgba(78,205,196,0.3); }
+
+    /* OBS notes */
+    .obs-note {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+
+    .obs-note-title {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .obs-note ol { padding-left: 20px; }
+    .obs-note li { font-size: 0.875rem; color: var(--gray); margin-bottom: 6px; }
+    .obs-note code {
+      background: var(--darker);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--secondary);
+    }
+
+    /* Sponsors */
+    .sponsors-section { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      color: var(--primary);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .sponsors-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sponsor-tag {
+      font-size: 0.8rem;
+      color: var(--gray);
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 40px;
+    }
+
+    .footer a { color: var(--secondary); text-decoration: none; }
+
+    /* Day selector pills */
+    .pill { cursor: pointer; transition: all 0.2s; }
+    .pill:hover { filter: brightness(1.2); transform: translateY(-1px); }
+    .pill-day1 { opacity: 0.45; }
+    .pill-day1.active { opacity: 1; box-shadow: 0 0 12px rgba(255,107,107,0.4); }
+    .pill-day2 { opacity: 0.45; }
+    .pill-day2.active { opacity: 1; box-shadow: 0 0 12px rgba(78,205,196,0.4); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="event-header">
+      <div class="event-eyebrow">GSCRL OBS Overlays</div>
+      <h1 class="event-title">MECHANICAL <span class="highlight">MAYHEM</span></h1>
+      <p class="event-meta">Sussex County Maker Fest &bull; Ideal Farm &amp; Garden Center &bull; Lafayette Township, NJ &bull; October 3–4, 2026</p>
+      <div class="event-pills">
+        <a href="?day=1" class="pill pill-day1" id="day1">Saturday, Oct 3 — Fairy &amp; Ants</a>
+        <a href="?day=2" class="pill pill-day2" id="day2">Sunday, Oct 4 — Beetles</a>
+      </div>
+    </header>
+
+    <!-- OBS Quick Setup -->
+    <div class="obs-note">
+      <div class="obs-note-title">OBS QUICK SETUP</div>
+      <ol>
+        <li>In OBS: <strong>Sources → + → Browser Source</strong></li>
+        <li>Paste the URL below into the URL field and set the recommended dimensions</li>
+        <li>Add Custom CSS: <code>body { background: transparent !important; }</code></li>
+      </ol>
+    </div>
+
+    <!-- Current day info -->
+    <div class="day-heading" style="margin-bottom:24px">
+      <div>
+        <div class="day-label" id="dayLabel"></div>
+        <div class="day-sub" id="daySub"></div>
+      </div>
+      <div class="day-line"></div>
+    </div>
+
+    <!-- Overlay cards -->
+    <div class="overlays-grid">
+
+      <!-- Welcome Screen -->
+      <div class="overlay-card">
+        <div class="card-preview">WELCOME</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Welcome Screen</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc" id="desc-welcome">Opening splash with event branding, venue, weight classes, sponsors, and social handles.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-welcome">OBS URL</div>
+            <div class="url-text" id="url-welcome"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-welcome" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-welcome', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waiting Screen -->
+      <div class="overlay-card">
+        <div class="card-preview">WAITING</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Waiting Screen</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc">Pre-stream holding screen with animated spinner, event details, and schedule info.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-waiting">OBS URL</div>
+            <div class="url-text" id="url-waiting"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-waiting" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-waiting', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Match Info -->
+      <div class="overlay-card">
+        <div class="card-preview">MATCH</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Match Info</div>
+            <div class="card-dims">1920 &times; 300</div>
+          </div>
+          <p class="card-desc" id="desc-match">Lower-third bar showing player names, bot names, records, weight class, and match status.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-match">OBS URL</div>
+            <div class="url-text" id="url-match"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-match" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-match', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Break Timer (no day) -->
+      <div class="overlay-card">
+        <div class="card-preview">TIMER</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Break Timer</div>
+            <div class="card-dims">400 &times; 450</div>
+          </div>
+          <p class="card-desc">Countdown ring for stream breaks. Use <code>?duration=10</code> and <code>?autostart=true</code>.</p>
+          <div class="url-block">
+            <div class="url-label">OBS URL</div>
+            <div class="url-text" id="url-timer">break-timer.html?duration=10&amp;autostart=false</div>
+          </div>
+          <div class="card-actions">
+            <a href="break-timer.html" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-timer', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Info — Schedule -->
+      <div class="overlay-card">
+        <div class="card-preview">EVENT</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Event Info &mdash; Schedule</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc" id="desc-schedule">Published event schedule. All times are Eastern Daylight Time.</p>
+          <div class="url-block">
+            <div class="url-label" id="label-schedule">OBS URL</div>
+            <div class="url-text" id="url-schedule"></div>
+          </div>
+          <div class="card-actions">
+            <a id="preview-schedule" href="#" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-schedule', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Info — Partners (no day) -->
+      <div class="overlay-card">
+        <div class="card-preview">SPONSORS</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Event Info &mdash; Partners</div>
+            <div class="card-dims">1920 &times; 1080</div>
+          </div>
+          <p class="card-desc">Thank-you card for event partners and volunteers.</p>
+          <div class="url-block">
+            <div class="url-label">OBS URL</div>
+            <div class="url-text" id="url-sponsors">event-info.html?view=sponsors</div>
+          </div>
+          <div class="card-actions">
+            <a href="event-info.html?view=sponsors" target="_blank" class="btn btn-primary">Preview</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-sponsors', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event registration -->
+      <div class="overlay-card" id="card-truefinals" style="border-color:rgba(78,205,196,0.3);display:none">
+        <div class="card-preview" style="color:var(--secondary);font-size:1rem">EVENT INFO</div>
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">Event Registration</div>
+            <div class="card-dims" style="color:var(--secondary)">RCE</div>
+          </div>
+          <p class="card-desc">Official registration, competition classes, and event information.</p>
+          <div class="url-block">
+            <div class="url-label">Event URL</div>
+            <div class="url-text" id="url-truefinals">https://www.robotcombatevents.com/events/9596</div>
+          </div>
+          <div class="card-actions">
+            <a href="https://www.robotcombatevents.com/events/9596" target="_blank" class="btn btn-primary">Open Event</a>
+            <button class="btn btn-copy" onclick="copyUrlText('url-truefinals', this)">Copy URL</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="obs-note" style="margin-top:24px">
+      <div class="obs-note-title">LIVE MATCH DATA</div>
+      <p>Match Info uses manual settings or URL parameters. Live match overlays and the match log are available from the local TrueFinals service once it is running.</p>
+      <p style="margin-top:8px"><a href="http://localhost:3000/overlay.html" class="btn btn-secondary">Live Match Story</a> <a href="http://localhost:3000/matchbar.html" class="btn btn-secondary">Live Match Bar</a> <a href="http://localhost:3000/matchlog.html" class="btn btn-secondary">Match Log</a></p>
+      <p style="margin-top:8px"><a href="SETUP.md" class="btn btn-secondary">Event Setup Notes</a> <a href="event-info.html?day=1&amp;view=overview&amp;hidecontrols=true" class="btn btn-secondary">Saturday Overview</a> <a href="event-info.html?day=2&amp;view=overview&amp;hidecontrols=true" class="btn btn-secondary">Sunday Overview</a></p>
+    </div>
+
+    <!-- OBS Scene Collection Download -->
+    <div class="sponsors-section" style="margin-top:40px">
+      <div class="section-heading">OBS SCENE COLLECTION</div>
+      <p style="color:var(--gray);margin-bottom:16px;font-size:0.9rem;">Download the pre-built OBS scene collection — 12 day-specific overlay scenes are wired up and ready to import.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <a href="GSCRL_Mechanical_Mayhem_Season_5.json" download class="btn btn-primary" style="font-size:0.9rem;padding:10px 20px;">
+          &#8595; Download Scene Collection
+        </a>
+        <span style="color:var(--gray);font-size:0.85rem;">In OBS: Scene Collection &rarr; Import &rarr; select the downloaded JSON</span>
+      </div>
+      <p style="margin-top:12px"><a href="GSCRL_Mechanical_Mayhem_Season_5_Local.json" download class="btn btn-secondary">Download Local Scene Collection</a></p>
+      <p style="margin-top:12px;color:var(--gray)">Local setup: <code>npm run dev</code> from the repository in WSL. Hosted URLs require publishing this update first.</p>
+      <div style="margin-top:16px;color:var(--gray);font-size:0.82rem;line-height:1.7">
+        <strong style="color:var(--light)">Scenes included:</strong>
+        Saturday and Sunday: Welcome &bull; Waiting &bull; Match Info &bull; Schedule &bull; Event Overview. Shared: Break Timer &bull; Partners.
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>
+        GSCRL Mechanical Mayhem — Season 5 &bull;
+        <a href="https://gscrl.org/" target="_blank">gscrl.org</a> &bull;
+        <a href="../../index.html">All Overlays</a>
+      </p>
+      <p style="margin-top:6px">YouTube: @gscrl &bull; Instagram: @_gscrl &bull; Discord: discord.gg/qwkeeVWgs2</p>
+    </footer>
+
+  </div>
+
+  <script src="event-config.js"></script>
+  <script>
+    const day = getEventDay(), config = MechanicalMayhem.days[day];
+    document.getElementById('day'+day).classList.add('active');
+    document.getElementById('dayLabel').textContent = config.badge;
+    document.getElementById('daySub').textContent = config.classes.join(' • ');
+    const urls = {welcome:'welcome-screen.html?day='+day, waiting:'waiting-screen.html?day='+day,
+      match:'match-info.html?day='+day+'&hidecontrols=true', schedule:'event-info.html?day='+day+'&view=schedule&hidecontrols=true'};
+    for (const [key,url] of Object.entries(urls)) {
+      document.getElementById('url-'+key).textContent = new URL(url, window.location.href).href;
+      document.getElementById('label-'+key).textContent = 'OBS URL — '+config.label;
+      document.getElementById('preview-'+key).href = url;
+    }
+    document.getElementById('url-timer').textContent = new URL('break-timer.html?duration=10&autostart=true&hidecontrols=true',window.location.href).href;
+    document.getElementById('url-sponsors').textContent = new URL('event-info.html?view=sponsors&hidecontrols=true',window.location.href).href;
+    document.getElementById('card-truefinals').style.display = '';
+    async function copyUrlText(id, btn) {
+      const text = document.getElementById(id).textContent;
+      try { await navigator.clipboard.writeText(new URL(text,window.location.href).href); btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy URL',2000); }
+      catch { btn.textContent = 'Select and copy URL above'; }
+    }
+  </script>
+</body>
+</html>
